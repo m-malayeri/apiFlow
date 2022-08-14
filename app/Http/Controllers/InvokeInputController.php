@@ -82,4 +82,10 @@ class InvokeInputController extends Controller
     {
         //
     }
+
+    public function getInvokeInputs($invokeId)
+    {
+        $result = (new InvokeInput)->getInvokeInputs($invokeId);
+        return $result;
+    }
 }

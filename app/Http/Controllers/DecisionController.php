@@ -82,4 +82,10 @@ class DecisionController extends Controller
     {
         //
     }
+
+    public function getDecisionDetails($decisionId)
+    {
+        $result = (new Decision)->getDecisionDetails($decisionId);
+        return $result;
+    }
 }

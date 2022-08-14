@@ -112,34 +112,34 @@ class FlowController extends Controller
     public function execute($flowName, Request $request)
     {
         // Log session
-        $sessionId = SessionController::store($request);
+        $sessionId = (new SessionController)->store($request);
 
         // Get flow seq
         $flowId = Flow::getFlowId($flowName);
-        $flowNodes = FlowNode::getFlowNodes($flowId);
+        $flowNodes = (new FlowNodeController)->getFlowNodes($flowId);
         $decisionResult = "true";
 
         foreach ($flowNodes as $flowNode) {
             $nodeType = $flowNode->node_type;
 
             if ($nodeType == "Action" && $decisionResult == "true") {
-                $actionDetails = Action::getActionDetails($flowNode->node_spec_id);
+                $actionDetails = (new ActionController)->getActionDetails($flowNode->node_spec_id);
 
                 if ($actionDetails->action_type == "Invoke") {
                     // Get invoke details
-                    $invokeDetails = Invoke::getInvokeDetails($actionDetails->action_spec_id);
-                    $invokeInputs = InvokeInput::getInvokeInputs($invokeDetails->id);
+                    $invokeDetails = (new InvokeController)->getInvokeDetails($actionDetails->action_spec_id);
+                    $invokeInputs = (new InvokeInput)->getInvokeInputs($invokeDetails->id);
 
                     // Invoke
                     $invokeResults = $this->invoke($request, $invokeDetails, $invokeInputs);
 
                     // Log properties
-                    Property::store($invokeResults, $sessionId, $flowNode->id);
+                    (new PropertyController)->store($invokeResults, $sessionId, $flowNode->id);
                 }
             } else if ($nodeType == "Decision" && $decisionResult == "true") {
                 // Get decision details
-                $decisionDetails = Decision::getDecisionDetails($flowNode->node_spec_id);
-                $propertyDetails = Property::getPropertyDetails($decisionDetails->prop_name, $sessionId, $decisionDetails->flow_node_id);
+                $decisionDetails = (new DecisionController)->getDecisionDetails($flowNode->node_spec_id);
+                $propertyDetails = (new PropertyController)->getPropertyDetails($decisionDetails->prop_name, $sessionId, $decisionDetails->flow_node_id);
 
                 // Decide
                 $decisionResult = $this->decide($propertyDetails, $decisionDetails);

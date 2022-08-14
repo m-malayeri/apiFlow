@@ -33,7 +33,7 @@ class SessionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public static function store(Request $request)
+    public function store(Request $request)
     {
         $flow_name = explode("/", $request->path());
         $flow_name = $flow_name[1];
@@ -42,8 +42,8 @@ class SessionController extends Controller
             'src_ip' => $request->ip(),
             'created_at' => now()
         );
-        $sessionId = Session::store($array);
-        return $sessionId;
+        $result = (new Session)->store($array);
+        return $result;
     }
 
     /**

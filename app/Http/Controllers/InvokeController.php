@@ -82,4 +82,10 @@ class InvokeController extends Controller
     {
         //
     }
+
+    public function getInvokeDetails($invokeId)
+    {
+        $result = (new Invoke)->getInvokeDetails($invokeId);
+        return $result;
+    }
 }

@@ -83,4 +83,9 @@ class ActionController extends Controller
         //
     }
 
+    public function getActionDetails($actionId)
+    {
+        $result = (new Action)->getActionDetails($actionId);
+        return $result;
+    }
 }

@@ -4,9 +4,6 @@ namespace App\Http\Controllers;
 
 use App\FlowNode;
 use Illuminate\Http\Request;
-use DB;
-use PDO;
-use Carbon\Carbon;
 
 class FlowNodeController extends Controller
 {
@@ -86,4 +83,9 @@ class FlowNodeController extends Controller
         //
     }
 
+    public function getFlowNodes($flowId)
+    {
+        $result = (new FlowNode)->getFlowNodes($flowId);
+        return $result;
+    }
 }

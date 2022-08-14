@@ -33,9 +33,10 @@ class PropertyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store($invokeResults, $sessionId, $flowNodeId)
     {
-        //
+        $result = (new Property)->store($invokeResults, $sessionId, $flowNodeId);
+        return $result;
     }
 
     /**
@@ -81,5 +82,11 @@ class PropertyController extends Controller
     public function destroy(Property $property)
     {
         //
+    }
+
+    public function getPropertyDetails($propertyName, $sessionId, $flowNodeId)
+    {
+        $result = (new Property)->getPropertyDetails($propertyName, $sessionId, $flowNodeId);
+        return $result;
     }
 }
