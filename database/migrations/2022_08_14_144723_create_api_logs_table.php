@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePropertysTable extends Migration
+class CreateApiLogsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,15 @@ class CreatePropertysTable extends Migration
      */
     public function up()
     {
-        Schema::create('propertys', function (Blueprint $table) {
+        Schema::create('api_logs', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('session_id');
-            $table->integer('flow_node_id');
-            $table->text('property_name');
-            $table->text('property_value');
+            $table->text('endpoint');
+            $table->text('req_timestamp');
+            $table->text('rsp_timestamp');
+            $table->integer('duration');
+            $table->text('req');
+            $table->text('rsp');
             $table->timestamps();
         });
     }
@@ -30,6 +33,6 @@ class CreatePropertysTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('propertys');
+        Schema::dropIfExists('api_logs');
     }
 }

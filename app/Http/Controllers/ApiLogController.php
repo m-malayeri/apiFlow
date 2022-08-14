@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Property;
+use App\ApiLog;
 use Illuminate\Http\Request;
 
-class PropertyController extends Controller
+class ApiLogController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -33,19 +33,35 @@ class PropertyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($invokeResults, $sessionId, $flowNodeId)
+    public function store($request, $sessionId)
     {
-        $result = (new Property)->store($invokeResults, $sessionId, $flowNodeId);
+        $body = $request->getContent();
+
+        $data = json_decode(json_encode($body), true);
+
+        $array = array(
+            'session_id' => $sessionId,
+            'endpoint' => $request->path(),
+            'req_timestamp' => now(),
+            'rsp_timestamp' => "",
+            'duration' => 0,
+            'req' => $data,
+            'rsp' => "",
+            'created_at' => now(),
+            'updated_at' => now(),
+        );
+
+        $result = (new ApiLog)->store($array);
         return $result;
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Property  $property
+     * @param  \App\ApiLog  $ApiLog
      * @return \Illuminate\Http\Response
      */
-    public function show(Property $property)
+    public function show(APILog $aPILog)
     {
         //
     }
@@ -53,10 +69,10 @@ class PropertyController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Property  $property
+     * @param  \App\ApiLog  $ApiLog
      * @return \Illuminate\Http\Response
      */
-    public function edit(Property $property)
+    public function edit(ApiLog $ApiLog)
     {
         //
     }
@@ -65,28 +81,23 @@ class PropertyController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Property  $property
+     * @param  \App\ApiLog  $ApiLog
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Property $property)
+    public function update($logId, $flowResponse)
     {
-        //
+        $flowResponse = json_encode($flowResponse);
+        (new ApiLog)->updateLog($logId, $flowResponse);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Property  $property
+     * @param  \App\ApiLog  $ApiLog
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(ApiLog $ApiLog)
     {
-        Property::where('session_id', $id)->delete();
-    }
-
-    public function getPropertyDetails($propertyName, $sessionId, $flowNodeId)
-    {
-        $result = (new Property)->getPropertyDetails($propertyName, $sessionId, $flowNodeId);
-        return $result;
+        //
     }
 }

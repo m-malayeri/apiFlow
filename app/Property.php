@@ -21,7 +21,9 @@ class Property extends Model
                 'session_id' => $sessionId,
                 'flow_node_id' => $flowNodeId,
                 'property_name' => $propName,
-                'property_value' => $propValue
+                'property_value' => $propValue,
+                'created_at' => now(),
+                'updated_at' => now()
             );
             Property::insert($array);
         }

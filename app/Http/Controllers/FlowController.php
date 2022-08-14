@@ -9,17 +9,9 @@ use App\Http\Controllers\ActionController;
 use App\Http\Controllers\DecisionController;
 use App\Http\Controllers\InvokeController;
 use App\Http\Controllers\InvokeInputController;
-use App\Http\Controllers\InvokeOutputController;
+use App\Http\Controllers\ApiLogController;
 
 use App\Flow;
-use App\FlowNode;
-use App\Invoke;
-use App\InvokeInput;
-use App\InvokeOutput;
-use App\Property;
-use App\Session;
-use App\Action;
-use App\Decision;
 use Illuminate\Http\Request;
 
 use DB;
@@ -114,6 +106,9 @@ class FlowController extends Controller
         // Log session
         $sessionId = (new SessionController)->store($request);
 
+        // Log REQ
+        $logId = (new ApiLogController)->store($request, $sessionId);
+
         // Get flow seq
         $flowId = Flow::getFlowId($flowName);
         $flowNodes = (new FlowNodeController)->getFlowNodes($flowId);
@@ -128,7 +123,7 @@ class FlowController extends Controller
                 if ($actionDetails->action_type == "Invoke") {
                     // Get invoke details
                     $invokeDetails = (new InvokeController)->getInvokeDetails($actionDetails->action_spec_id);
-                    $invokeInputs = (new InvokeInput)->getInvokeInputs($invokeDetails->id);
+                    $invokeInputs = (new InvokeInputController)->getInvokeInputs($invokeDetails->id);
 
                     // Invoke
                     $invokeResults = $this->invoke($request, $invokeDetails, $invokeInputs);
@@ -146,6 +141,7 @@ class FlowController extends Controller
             }
         }
 
+        // Calculate flow response code and append last action result into main response
         $flowResponse = new \stdClass();
         if (isset($invokeResults)) {
 
@@ -165,6 +161,13 @@ class FlowController extends Controller
             $flowResponse->ResponseCode = "-101";
             $flowResponse->ResponseDescription = "Unable to retrive latest action properties";
         }
+
+        // Destroy session and properties
+        (new SessionController)->destroy($sessionId);
+        (new PropertyController)->destroy($sessionId);
+
+        // Update RSP
+        (new APILogController)->update($logId, $flowResponse);
 
         return response()->json($flowResponse);
     }
