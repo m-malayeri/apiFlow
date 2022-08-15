@@ -14,10 +14,6 @@ use App\Http\Controllers\ApiLogController;
 use App\Flow;
 use Illuminate\Http\Request;
 
-use DB;
-use PDO;
-use Carbon\Carbon;
-
 class FlowController extends Controller
 {
     /**
@@ -107,7 +103,7 @@ class FlowController extends Controller
         $sessionId = (new SessionController)->store($request);
 
         // Log REQ
-        $logId = (new ApiLogController)->store($request, $sessionId);
+        $apiLog = (new ApiLogController)->store($request, $sessionId);
 
         // Get flow seq
         $flowId = Flow::getFlowId($flowName);
@@ -116,7 +112,6 @@ class FlowController extends Controller
 
         foreach ($flowNodes as $flowNode) {
             $nodeType = $flowNode->node_type;
-
             if ($nodeType == "Action" && $decisionResult == "true") {
                 $actionDetails = (new ActionController)->getActionDetails($flowNode->node_spec_id);
 
@@ -144,12 +139,10 @@ class FlowController extends Controller
         // Calculate flow response code and append last action result into main response
         $flowResponse = new \stdClass();
         if (isset($invokeResults)) {
-
             $invokeResults = json_decode($invokeResults);
             $flowResponse->ResponseCode = "";
             $flowResponse->ResponseDescription = "";
             $flowResponse->LastActionResult = $invokeResults;
-
             if ($decisionResult == true) {
                 $flowResponse->ResponseCode = "0";
                 $flowResponse->ResponseDescription = "Flow execution completed successfully";
@@ -166,8 +159,8 @@ class FlowController extends Controller
         (new SessionController)->destroy($sessionId);
         (new PropertyController)->destroy($sessionId);
 
-        // Update RSP
-        (new APILogController)->update($logId, $flowResponse);
+        // Update RSP and calculate duration
+        (new ApiLogController)->update($apiLog, $flowResponse);
 
         return response()->json($flowResponse);
     }
@@ -176,12 +169,18 @@ class FlowController extends Controller
     {
         foreach ($invokeInputs as $invokeInput) {
             $inputType = $invokeInput->input_type;
+            $parentObject = $invokeDetails->req_parent_object;
+
             if ($inputType == "User") {
-                $req["body"][$invokeInput->input_name] = $request[$invokeInput->api_input_name];
-                //
+                if ($parentObject != "")
+                    $req[$parentObject][$invokeInput->input_name] = $request[$invokeInput->api_input_name];
+                else
+                    $req[$invokeInput->input_name] = $request[$invokeInput->api_input_name];
             } else if ($inputType == "Literal") {
-                $req["body"][$invokeInput->input_name] = $invokeInput->literal_value;
-                //
+                if ($parentObject != "")
+                    $req[$parentObject][$invokeInput->input_name] = $invokeInput->literal_value;
+                else
+                    $req[$invokeInput->input_name] = $invokeInput->literal_value;
             }
         }
 
@@ -201,34 +200,37 @@ class FlowController extends Controller
         $invokeResults = curl_exec($ch);
         curl_close($ch);
 
-        if (isset($invokeResults)) {
+        if (isset($invokeResults))
             return $invokeResults;
-        } else {
+        else
             return null;
-        }
     }
 
     public function decide($propertyDetails, $decisionDetails)
     {
         $successFlag = false;
-        $decisionType = $decisionDetails->decision_type;
-        switch ($decisionType) {
-            case "Equal":
-                if ($propertyDetails->property_value ==  $decisionDetails->prop_value)
-                    $successFlag = true;
-                break;
-            case "Not Equal":
-                if ($propertyDetails->property_value !=  $decisionDetails->prop_value)
-                    $successFlag = true;
-                break;
-            case "Greater Than":
-                if ($propertyDetails->property_value >  $decisionDetails->prop_value)
-                    $successFlag = true;
-                break;
-            case "Less Than":
-                if ($propertyDetails->property_value <  $decisionDetails->prop_value)
-                    $successFlag = true;
-                break;
+        if (isset($propertyDetails) && isset($decisionDetails)) {
+            $decisionType = $decisionDetails->decision_type;
+            $decisionValue = $decisionDetails->prop_value;
+            $propertyValue = $propertyDetails->property_value;
+            switch ($decisionType) {
+                case "Equal":
+                    if ($propertyValue ==  $decisionValue)
+                        $successFlag = true;
+                    break;
+                case "Not Equal":
+                    if ($propertyValue !=  $decisionValue)
+                        $successFlag = true;
+                    break;
+                case "Greater Than":
+                    if ($propertyValue >  $decisionValue)
+                        $successFlag = true;
+                    break;
+                case "Less Than":
+                    if ($propertyValue <  $decisionValue)
+                        $successFlag = true;
+                    break;
+            }
         }
         return $successFlag;
     }

@@ -84,10 +84,10 @@ class ApiLogController extends Controller
      * @param  \App\ApiLog  $ApiLog
      * @return \Illuminate\Http\Response
      */
-    public function update($logId, $flowResponse)
+    public function update($apiLog, $flowResponse)
     {
         $flowResponse = json_encode($flowResponse);
-        (new ApiLog)->updateLog($logId, $flowResponse);
+        (new ApiLog)->updateLog($apiLog->id, $apiLog->req_timestamp, $flowResponse);
     }
 
     /**

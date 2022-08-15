@@ -21,6 +21,7 @@ class CreateInvokesTable extends Migration
             $table->text('auth_type');
             $table->text('user');
             $table->text('password');
+            $table->text('req_parent_object');
             $table->timestamps();
         });
     }

@@ -6,14 +6,13 @@ INSERT INTO `actions` (`id`, `action_name`, `action_type`, `action_spec_id`, `cr
 (2, 'Call MemberRegistration', 'Invoke', 2, '2022-08-02 19:30:00', '2022-08-02 19:30:00'),
 (3, 'Call RpTnx', 'Invoke', 3, '2022-08-02 19:30:00', '2022-08-02 19:30:00');
 
-
 --
 -- Dumping data for table `invokes`
 --
-INSERT INTO `invokes` (`id`, `url`, `method`, `content_type`, `auth_type`, `user`, `password`, `created_at`, `updated_at`) VALUES
-(1, 'https://172.22.134.177/siebel/v1.0/service/LoyaltyProgramWebService/RegisterProcessTnx', 'Post', 'application/json', 'Basic', 'sadmin', 'sadmin21', '2022-08-02 15:00:00', '2022-08-02 15:00:00'),
-(2, 'https://172.22.134.177/siebel/v1.0/service/LoyaltyMemberWebService/MemberRegisteration', 'Post', 'application/json', 'Basic', 'sadmin', 'sadmin21', '2022-08-02 15:00:00', '2022-08-02 15:00:00'),
-(3, 'https://172.22.134.177/siebel/v1.0/service/LoyaltyProgramWebService/RegisterProcessTnx', 'Post', 'application/json', 'Basic', 'sadmin', 'sadmin21', '2022-08-02 15:00:00', '2022-08-02 15:00:00');
+INSERT INTO `invokes` (`id`, `url`, `method`, `content_type`, `auth_type`, `user`, `password`, `req_parent_object`, `created_at`, `updated_at`) VALUES
+(1, 'https://172.22.134.177/siebel/v1.0/service/LoyaltyProgramWebService/RegisterProcessTnx', 'Post', 'application/json', 'Basic', 'sadmin', 'sadmin21', 'body', '2022-08-02 10:30:00', '2022-08-02 10:30:00'),
+(2, 'https://172.22.134.177/siebel/v1.0/service/LoyaltyMemberWebService/MemberRegisteration', 'Post', 'application/json', 'Basic', 'sadmin', 'sadmin21', 'body', '2022-08-02 10:30:00', '2022-08-02 10:30:00'),
+(3, 'https://172.22.134.177/siebel/v1.0/service/LoyaltyProgramWebService/RegisterProcessTnx', 'Post', 'application/json', 'Basic', 'sadmin', 'sadmin21', 'body', '2022-08-02 10:30:00', '2022-08-02 10:30:00');
 
 --
 -- Dumping data for table `invoke_inputs`
@@ -44,7 +43,6 @@ INSERT INTO `invoke_inputs` (`id`, `invoke_id`, `input_name`, `input_type`, `lit
 INSERT INTO `flows` (`id`, `flow_name`, `created_at`, `updated_at`) VALUES
 (1, 'AutoRegister', '2022-08-02 19:30:00', '2022-08-02 19:30:00');
 
-
 --
 -- Dumping data for table `flow_nodes`
 --
@@ -54,7 +52,6 @@ INSERT INTO `flow_nodes` (`id`, `flow_id`, `node_type`, `node_seq`, `node_spec_i
 (2, 1, 'Action', 2, 2, '2022-08-02 19:30:00', '2022-08-02 19:30:00'),
 (3, 1, 'Decision', 3, 2, '2022-08-02 15:00:00', '2022-08-02 15:00:00'),
 (4, 1, 'Action', 4, 3, '2022-08-02 19:30:00', '2022-08-02 19:30:00');
-
 
 --
 -- Dumping data for table `decisions`
