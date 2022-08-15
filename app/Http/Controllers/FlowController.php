@@ -106,7 +106,7 @@ class FlowController extends Controller
         $apiLog = (new ApiLogController)->store($request, $sessionId);
 
         // Get flow seq
-        $flowId = Flow::getFlowId($flowName);
+        $flowId = (new Flow)->getFlowId($flowName);
         $flowNodes = (new FlowNodeController)->getFlowNodes($flowId);
         $decisionResult = "true";
 
@@ -152,7 +152,7 @@ class FlowController extends Controller
             }
         } else {
             $flowResponse->ResponseCode = "-101";
-            $flowResponse->ResponseDescription = "Unable to retrive latest action properties";
+            $flowResponse->ResponseDescription = "Unable to fetch latest action properties";
         }
 
         // Destroy session and properties
