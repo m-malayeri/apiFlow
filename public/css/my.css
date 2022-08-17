@@ -1,0 +1,27 @@
+ul{
+    list-style-type: none
+}
+
+.navbar{
+    margin-bottom:0px;
+}
+
+.sidebar{
+	padding: 60px 0px 0px 0px;
+	background-color:#3498db;
+    height:700px;
+}
+ul>li>a {
+	color: rgb(255, 255, 255);
+	text-decoration:none;
+    width:300px;
+    height:50px;
+}
+ul>li>a:hover {
+    background-color: rgb(172, 185, 197);
+    color:rgb(255, 255, 255);
+}
+
+.main{
+    background-color:#d1d0d0;
+}

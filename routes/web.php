@@ -15,5 +15,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-//Route::any('/execute/{flowName}', [FlowController::class, 'execute']);
-Route::any('execute/{flowName}',array('uses' => 'FlowController@execute'));
+Route::any('execute/{flowName}', array('uses' => 'FlowController@execute'));
+
+Route::get('/', function () {
+    return view('welcome');
+});
