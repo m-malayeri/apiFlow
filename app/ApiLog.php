@@ -17,4 +17,11 @@ class ApiLog extends Model
         $duration = now()->diffInMilliSeconds($reqTimestamp);
         ApiLog::where('id', $id)->update(['rsp_timestamp' => now(), 'duration' => $duration, 'rsp' => $flowResponse]);
     }
+
+    public function getAllLogs()
+    {
+        // Query all logs 
+        $result = ApiLog::get();
+        return $result;
+    }
 }

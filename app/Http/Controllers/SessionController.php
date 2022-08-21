@@ -90,4 +90,10 @@ class SessionController extends Controller
     {
         Session::where('id', $id)->delete();
     }
+
+    public function getAllSessions()
+    {
+        $result = (new Session)->getAllSessions();
+        return $result;
+    }
 }

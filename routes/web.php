@@ -11,12 +11,12 @@
 |
 */
 
+Route::any('/', array('uses' => 'MainController@getHomeData'));
+Route::any('execute/{flowName}', array('uses' => 'MainController@execute'));
+Route::post('flow', array('uses' => 'FlowController@store'));
+
+/*
 Route::get('/', function () {
     return view('welcome');
 });
-
-Route::any('execute/{flowName}', array('uses' => 'FlowController@execute'));
-
-Route::get('/', function () {
-    return view('welcome');
-});
+*/

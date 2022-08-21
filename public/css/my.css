@@ -2,11 +2,11 @@ ul{
     list-style-type: none
 }
 .my-nav{
-    background-color:#BDC3C7;
+    background-color:#ECF0F1;
     
 }
 .logo{
-    width: 130px;
+    width: 100px;
     height: 40px;
 }
 .my-nav-tab{
@@ -14,18 +14,17 @@ ul{
     padding-top: 20px;
 }
 .my-tab-content{
-    border-left: 1px solid #dee2e6;
     padding: 30px;
-    height: 580px;
+    min-height: 580px;
 }
-.main{
-    
+.my-flow-btn{
+    margin-bottom: 15px;
 }
 .sidebar{
     background-color: #ECF0F1;
 }
 .footer{
-    background-color:#3498db;
+    background-color:#fff;
 }
 ul>li>a {
 	color: rgb(255, 255, 255);
