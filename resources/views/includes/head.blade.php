@@ -9,13 +9,12 @@
 <link rel="icon" href="{{ URL::asset('favicon.ico') }}">
 
 <!-- CSS -->
-<link rel="stylesheet" href="{{ URL::asset('css/vendor/bootstrap.css') }}">
-<link rel="stylesheet" href="{{ URL::asset('css/app.css') }}">
-<link rel="stylesheet" href="{{ URL::asset('css/flat-ui.css') }}">
-<link rel="stylesheet" href="{{ URL::asset('css/docs.css') }}">
+<link rel="stylesheet" href="{{ URL::asset('css/bootstrap.css') }}">
+<link rel="stylesheet" href="{{ URL::asset('css/bootstrap-grid.css') }}">
+<link rel="stylesheet" href="{{ URL::asset('css/bootstrap-reboot.css') }}">
+<link rel="stylesheet" href="{{ URL::asset('css/bootstrap-utilities.css') }}">
 <link rel="stylesheet" href="{{ URL::asset('css/my.css') }}">
 
 <!-- JavaScript -->
-<script src="{{ URL::asset('scripts/flat-ui.js') }}"></script>
-<script src="{{ URL::asset('js/app.js') }}"></script>
 <script src="{{ URL::asset('js/bootstrap.js') }}"></script>
+<script src="{{ URL::asset('js/bootstrap.bundle.js') }}"></script>

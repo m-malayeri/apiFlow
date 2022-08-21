@@ -7,11 +7,11 @@
 <body>
     @include('includes.nav')
     @yield('content')
-    <footer class="footer-section">
+    <footer>
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-12">
-                    XX
+                <div class="col-md-12 footer">
+                     
                 </div>
             </div>
         </div>

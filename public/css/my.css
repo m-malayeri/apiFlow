@@ -1,15 +1,31 @@
 ul{
     list-style-type: none
 }
-
-.navbar{
-    margin-bottom:0px;
+.my-nav{
+    background-color:#BDC3C7;
+    
 }
-
+.logo{
+    width: 130px;
+    height: 40px;
+}
+.my-nav-tab{
+    border-bottom: 1px solid #dee2e6;
+    padding-top: 20px;
+}
+.my-tab-content{
+    border-left: 1px solid #dee2e6;
+    padding: 30px;
+    height: 580px;
+}
+.main{
+    
+}
 .sidebar{
-	padding: 60px 0px 0px 0px;
-	background-color:#3498db;
-    height:700px;
+    background-color: #ECF0F1;
+}
+.footer{
+    background-color:#3498db;
 }
 ul>li>a {
 	color: rgb(255, 255, 255);
@@ -20,8 +36,4 @@ ul>li>a {
 ul>li>a:hover {
     background-color: rgb(172, 185, 197);
     color:rgb(255, 255, 255);
-}
-
-.main{
-    background-color:#d1d0d0;
 }
