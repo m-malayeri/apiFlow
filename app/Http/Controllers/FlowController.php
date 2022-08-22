@@ -39,7 +39,7 @@ class FlowController extends Controller
 		if (isset($flowId)) {
 			return redirect('/')->withMessage('Record inserted successfully');
 		} else {
-			return redirect('/')->withError('Record inserted failed, please try again');
+			return redirect('/')->withError('Duplicate record is not allowed, please try again with another name');
 		}
 	}
 
@@ -49,8 +49,10 @@ class FlowController extends Controller
 	 * @param  \App\Flow  $flow
 	 * @return \Illuminate\Http\Response
 	 */
-	public function show(Flow $flow)
+	public function show($flowId)
 	{
+		$flowDetails = (new Flow)->show($flowId);
+		return view('nodes')->with(compact('flowDetails'));
 	}
 
 	/**
@@ -82,14 +84,15 @@ class FlowController extends Controller
 	 * @param  \App\Flow  $flow
 	 * @return \Illuminate\Http\Response
 	 */
-	public function destroy(Flow $flow)
+	public function destroy($flowId)
 	{
-		//
+		$user = (new Flow)->where('id', $flowId)->firstorfail()->delete();
+		return redirect(url()->previous())->withMessage('Record deleted successfully');
 	}
 
-	public function getFlowId($flowName)
+	public function getFlowDetails($flowName)
 	{
-		$result = (new Flow)->getFlowId($flowName);
+		$result = (new Flow)->getFlowDetails($flowName);
 		return $result;
 	}
 
@@ -97,5 +100,17 @@ class FlowController extends Controller
 	{
 		$result = (new Flow)->getAllFlows();
 		return $result;
+	}
+
+	public function disable($flowId)
+	{
+		(new Flow)->disable($flowId);
+		return redirect('/')->withMessage('Record updated successfully');
+	}
+
+	public function enable($flowId)
+	{
+		(new Flow)->enable($flowId);
+		return redirect('/')->withMessage('Record updated successfully');
 	}
 }

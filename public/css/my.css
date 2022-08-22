@@ -16,12 +16,20 @@ ul{
 .my-tab-content{
     padding: 30px;
     min-height: 580px;
+    border-bottom:1px solid #dee2e6;
+    border-right:1px solid #dee2e6;
+    border-left:1px solid #dee2e6;
 }
 .my-flow-btn{
     margin-bottom: 15px;
 }
+.my-icons>a{
+    font-size: 18px;
+    font-weight: 600;
+    padding-right: 5px;
+}
 .sidebar{
-    background-color: #ECF0F1;
+    padding-top: 20px;
 }
 .footer{
     background-color:#fff;

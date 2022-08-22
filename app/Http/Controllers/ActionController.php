@@ -88,4 +88,10 @@ class ActionController extends Controller
         $result = (new Action)->getActionDetails($actionId);
         return $result;
     }
+
+    public function getNodeActions($nodeId)
+    {
+        $result = (new Action)->getNodeActions($nodeId);
+        return $result;
+    }
 }

@@ -25,6 +25,13 @@ class MainController extends Controller
         return view('welcome')->with(compact('flows', 'sessions', 'logs'));
     }
 
+    public function getFlowData($flowId)
+    {
+        // Query all home date 
+        $nodes = (new FlowNodeController)->getFlowNodes($flowId);
+        return view('nodes')->with(compact('nodes'));
+    }
+
     public function execute($flowName, Request $request)
     {
         // Log session
@@ -34,8 +41,8 @@ class MainController extends Controller
         $apiLog = (new ApiLogController)->store($request, $sessionId);
 
         // Get flow seq
-        $flowId = (new FlowController)->getFlowId($flowName);
-        $flowNodes = (new FlowNodeController)->getFlowNodes($flowId);
+        $flowDetails = (new FlowController)->getFlowDetails($flowName);
+        $flowNodes = (new FlowNodeController)->getFlowNodes($flowDetails->id);
         $decisionResult = "true";
 
         foreach ($flowNodes as $flowNode) {
@@ -83,9 +90,12 @@ class MainController extends Controller
             $flowResponse->ResponseDescription = "Unable to fetch latest action properties";
         }
 
-        // Destroy session and properties
-        (new SessionController)->destroy($sessionId);
-        (new PropertyController)->destroy($sessionId);
+        // Destroy session and properties based on flow config.
+        if ($flowDetails->log_level == "Property") {
+            (new SessionController)->destroy($sessionId);
+        } else if ($flowDetails->log_level == "Session") {
+            (new PropertyController)->destroy($sessionId);
+        }
 
         // Update RSP and calculate duration
         (new ApiLogController)->update($apiLog, $flowResponse);

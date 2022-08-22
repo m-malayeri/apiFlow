@@ -40,7 +40,8 @@ class SessionController extends Controller
         $array = array(
             'flow_name' => $flow_name,
             'src_ip' => $request->ip(),
-            'created_at' => now()
+            'created_at' => now(),
+            'updated_at' => now()
         );
         $result = (new Session)->store($array);
         return $result;

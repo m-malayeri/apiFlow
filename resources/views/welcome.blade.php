@@ -4,7 +4,8 @@
 <section class="main-section">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-12 main">
+            @include('includes.sidebar')
+            <div class="col-md-10 main">
                 <ul class="nav nav-tabs my-nav-tab" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="flows-tab" data-bs-toggle="tab" data-bs-target="#flows" type="button" role="tab" aria-controls="flows" aria-selected="true">Flows</button>
