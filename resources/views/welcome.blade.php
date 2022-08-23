@@ -3,7 +3,7 @@
 @section('content')
 <section class="main-section">
     <div class="container-fluid">
-        <div class="row">
+        <div class="row my-main-padding">
             @include('includes.sidebar')
             <div class="col-md-10 main">
                 <ul class="nav nav-tabs my-nav-tab" id="myTab" role="tablist">
@@ -19,7 +19,6 @@
                 </ul>
                 <div class="tab-content my-tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="flows" role="tabpanel" aria-labelledby="flows-tab">
-                        @include('includes.flows-modal')
                         @include('includes.flows')
                     </div>
                     <div class="tab-pane fade" id="logs" role="tabpanel" aria-labelledby="logs-tab">

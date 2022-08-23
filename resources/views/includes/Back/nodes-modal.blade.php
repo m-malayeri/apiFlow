@@ -1,10 +1,3 @@
-@if (Session::has('message'))
-<div class="alert alert-success well-sm" role="alert">{{ Session::get('message') }}</div>
-@endif
-@if (Session::has('error'))
-<div class="alert alert-danger well-sm" role="alert">{{ Session::get('error') }}</div>
-@endif
-
 <button type="button" class="btn btn-primary my-flow-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">New Node</button>
 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -18,8 +11,7 @@
                 <form method="post" action="{{url('node')}}">
                     <div class="mb-3">
                         @csrf
-                        <label for="flow_id" class="col-form-label">Flow Id</label>
-                        <input type="text" class="form-control" id="flow_id" name="flow_id" required>
+                        <input type="hidden" class="form-control" id="flow_id" name="flow_id" value="{{$node->flow_id}}" required>
 
                         <label for="node_type" class="col-form-label">Node Type</label>
                         <input type="text" class="form-control" id="node_type" name="node_type" required>

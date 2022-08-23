@@ -78,14 +78,21 @@ class DecisionController extends Controller
      * @param  \App\Decision  $decision
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Decision $decision)
+    public function destroy($decisionId)
     {
-        //
+        $user = (new Decision)->where('id', $decisionId)->firstorfail()->delete();
+        return redirect(url()->previous())->withMessage('Record deleted successfully');
     }
 
     public function getDecisionDetails($decisionId)
     {
         $result = (new Decision)->getDecisionDetails($decisionId);
+        return $result;
+    }
+
+    public function getFlowDecisions($flowId)
+    {
+        $result = (new Decision)->getFlowDecisions($flowId);
         return $result;
     }
 }

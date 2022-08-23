@@ -6,12 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Flow extends Model
 {
-    public function getFlowDetails($flowName)
+    public function getFlowDetailsByName($flowName)
     {
         $result = Flow::where('flow_name', $flowName)->get();
         if (count($result) > 0)
             return $result[0];
         else return null;
+    }
+
+    public function getFlowDetailsById($flowId)
+    {
+        $result = Flow::where('id', $flowId)->get();
+        return $result;
     }
 
     public function getAllFlows()

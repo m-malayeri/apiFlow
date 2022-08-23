@@ -13,4 +13,12 @@ class Decision extends Model
             return $result[0];
         else return null;
     }
+
+    public function getFlowDecisions($flowId)
+    {
+        $result = Decision::where('flow_id', $flowId)->get();
+        if (count($result) > 0)
+            return $result;
+        else return null;
+    }
 }

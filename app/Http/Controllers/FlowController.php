@@ -90,10 +90,16 @@ class FlowController extends Controller
 		return redirect(url()->previous())->withMessage('Record deleted successfully');
 	}
 
-	public function getFlowDetails($flowName)
+	public function getFlowDetailsByName($flowName)
 	{
-		$result = (new Flow)->getFlowDetails($flowName);
+		$result = (new Flow)->getFlowDetailsByName($flowName);
 		return $result;
+	}
+
+	public function getFlowDetailsById($flowId)
+	{
+		$result = (new Flow)->getFlowDetailsById($flowId);
+		return $result[0];
 	}
 
 	public function getAllFlows()

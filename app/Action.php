@@ -13,4 +13,12 @@ class Action extends Model
             return $result[0];
         else return null;
     }
+
+    public function getFlowActions($flowId)
+    {
+        $result = Action::where('flow_id', $flowId)->get();
+        if (count($result) > 0)
+            return $result;
+        else return null;
+    }
 }

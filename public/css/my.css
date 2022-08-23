@@ -3,7 +3,6 @@ ul{
 }
 .my-nav{
     background-color:#ECF0F1;
-    
 }
 .logo{
     width: 100px;
@@ -11,10 +10,9 @@ ul{
 }
 .my-nav-tab{
     border-bottom: 1px solid #dee2e6;
-    padding-top: 20px;
 }
 .my-tab-content{
-    padding: 30px;
+    padding: 25px;
     min-height: 580px;
     border-bottom:1px solid #dee2e6;
     border-right:1px solid #dee2e6;
@@ -28,8 +26,10 @@ ul{
     font-weight: 600;
     padding-right: 5px;
 }
+.my-main-padding{
+    padding-top: 25px;
+}
 .sidebar{
-    padding-top: 20px;
 }
 .footer{
     background-color:#fff;

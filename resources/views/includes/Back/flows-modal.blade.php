@@ -23,8 +23,7 @@
 
                         <label for="log_level" class="form-label">Log Level</label>
                         <select id="log_level" class="form-select" name="log_level">
-                            <option selected>Choose...</option>
-                            <option>All</option>
+                            <option selected>All</option>
                             <option>Property</option>
                             <option>Session</option>
                         </select>

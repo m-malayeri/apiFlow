@@ -15,6 +15,7 @@ class CreateActionsTable extends Migration
     {
         Schema::create('actions', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigIncrements('flow_id');
             $table->text('action_name');
             $table->text('action_type');
             $table->integer('action_spec_id');

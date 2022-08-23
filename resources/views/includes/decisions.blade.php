@@ -5,13 +5,13 @@
 <div class="alert alert-danger well-sm" role="alert">{{ Session::get('error') }}</div>
 @endif
 
-<button type="button" class="btn btn-primary my-flow-btn" data-bs-toggle="modal" data-bs-target="#nodeModal">New Node</button>
+<button type="button" class="btn btn-primary my-flow-btn" data-bs-toggle="modal" data-bs-target="#decisionModal">New Decision</button>
 
-<div class="modal fade" id="nodeModal" tabindex="-1" aria-labelledby="nodeModalLabel" aria-hidden="true">
+<div class="modal fade" id="decisionModal" tabindex="-1" aria-labelledby="decisionModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="nodeModalLabel">New Node</h5>
+				<h5 class="modal-title" id="decisionModalLabel">New Decision</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
@@ -37,32 +37,30 @@
 	</div>
 </div>
 
-@if(count($flowNodes)>0)
-<table class="table table-striped table-hover">
+@if(count($decisions)>0)
+<table class="table table-striped table-hover table-striped">
 	<thead>
 		<tr>
 			<th scope="col">#</th>
-			<th scope="col">Flow Id</th>
-			<th scope="col">Node Type</th>
-			<th scope="col">Node Seq</th>
-			<th scope="col">Node Spec Id</th>
-			<th scope="col">Created At</th>
-			<th scope="col">Updated At</th>
+			<th scope="col">Decision Name</th>
+			<th scope="col">Flow Node Id</th>
+			<th scope="col">Property Name</th>
+			<th scope="col">Decision Type</th>
+			<th scope="col">Property Value</th>
 			<th scope="col">Manage</th>
 		</tr>
 	</thead>
 	<tbody>
-		@foreach($flowNodes as $flowNode)
+		@foreach($decisions as $decision)
 		<tr>
-			<th scope="row">{{$flowNode->id}}</th>
-			<td>{{$flowNode->flow_id}}</td>
-			<td>{{$flowNode->node_type}}</td>
-			<td>{{$flowNode->node_seq}}</td>
-			<td>{{$flowNode->node_spec_id}}</td>
-			<td>{{$flowNode->created_at}}</td>
-			<td>{{$flowNode->updated_at}}</td>
-			<td class="my-icons">
-				<a href="{{url('node/delete/'.$flowNode->id)}}"><i class="fa fa-remove"></i></a>
+			<th scope="row">{{$decision->id}}</th>
+			<td>{{$decision->decision_name}}</td>
+			<td>{{$decision->flow_node_id}}</td>
+			<td>{{$decision->prop_name}}</td>
+			<td>{{$decision->decision_type}}</td>
+			<td>{{$decision->prop_value}}</td>
+			<td class="my-decision-icons">
+				<a href="{{url('decision/delete/'.$decision->id)}}"><i class="fa fa-remove"></i></a>
 			</td>
 		</tr>
 		@endforeach

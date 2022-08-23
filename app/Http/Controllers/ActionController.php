@@ -78,9 +78,10 @@ class ActionController extends Controller
      * @param  \App\Action  $action
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Action $action)
+    public function destroy($actionId)
     {
-        //
+        $user = (new Action)->where('id', $actionId)->firstorfail()->delete();
+        return redirect(url()->previous())->withMessage('Record deleted successfully');
     }
 
     public function getActionDetails($actionId)
@@ -92,6 +93,12 @@ class ActionController extends Controller
     public function getNodeActions($nodeId)
     {
         $result = (new Action)->getNodeActions($nodeId);
+        return $result;
+    }
+
+    public function getFlowActions($flowId)
+    {
+        $result = (new Action)->getFlowActions($flowId);
         return $result;
     }
 }
