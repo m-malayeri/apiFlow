@@ -24,8 +24,10 @@ Route::get('node/{flowId}', array('uses' => 'MainController@getFlowData'));
 Route::post('node', array('uses' => 'FlowNodeController@store'));
 Route::get('node/delete/{flowId}', array('uses' => 'FlowNodeController@destroy'));
 
+Route::post('action', array('uses' => 'ActionController@store'));
 Route::get('action/delete/{actionId}', array('uses' => 'ActionController@destroy'));
 
+Route::post('decision', array('uses' => 'DecisionController@store'));
 Route::get('decision/delete/{decisionId}', array('uses' => 'DecisionController@destroy'));
 
 /*

@@ -1,10 +1,3 @@
-@if (Session::has('message'))
-<div class="alert alert-success well-sm" role="alert">{{ Session::get('message') }}</div>
-@endif
-@if (Session::has('error'))
-<div class="alert alert-danger well-sm" role="alert">{{ Session::get('error') }}</div>
-@endif
-
 <button type="button" class="btn btn-primary my-flow-btn" data-bs-toggle="modal" data-bs-target="#actionModal">New Action</button>
 
 <div class="modal fade" id="actionModal" tabindex="-1" aria-labelledby="actionModalLabel" aria-hidden="true">
@@ -23,8 +16,11 @@
 						<label for="action_name" class="col-form-label">Action Name</label>
 						<input type="text" class="form-control" id="action_name" name="action_name" required>
 
-						<label for="action_type" class="col-form-label">Action Type</label>
-						<input type="text" class="form-control" id="action_type" name="action_type" required>
+
+						<label for="action_type" class="form-label">Action Type</label>
+						<select id="action_type" class="form-select" name="action_type">
+							<option selected>Invoke</option>
+						</select>
 
 						<label for="action_spec_id" class="col-form-label">Action Spec Id</label>
 						<input type="text" class="form-control" id="action_spec_id" name="action_spec_id" required>

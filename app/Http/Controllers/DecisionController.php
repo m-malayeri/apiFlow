@@ -35,7 +35,8 @@ class DecisionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $decisionId = (new Decision)->store($request);
+        return redirect(url()->previous())->withMessage('Decision record inserted successfully');
     }
 
     /**
@@ -81,7 +82,7 @@ class DecisionController extends Controller
     public function destroy($decisionId)
     {
         $user = (new Decision)->where('id', $decisionId)->firstorfail()->delete();
-        return redirect(url()->previous())->withMessage('Record deleted successfully');
+        return redirect(url()->previous())->withMessage('Decision record deleted successfully');
     }
 
     public function getDecisionDetails($decisionId)

@@ -21,8 +21,11 @@
 						<input type="hidden" class="form-control" id="flow_id" name="flow_id" value="{{$flowDetails->id}}" required>
 						<input type="hidden" class="form-control" id="node_seq" name="node_seq" value="{{$maxSeq+1}}" required>
 
-						<label for="node_type" class="col-form-label">Node Type</label>
-						<input type="text" class="form-control" id="node_type" name="node_type" required>
+						<label for="node_type" class="form-label">Node Type</label>
+						<select id="node_type" class="form-select" name="node_type">
+							<option selected>Action</option>
+							<option>Decision</option>
+						</select>
 
 						<label for="node_spec_id" class="col-form-label">Node Spec Id</label>
 						<input type="text" class="form-control" id="node_spec_id" name="node_spec_id" required>

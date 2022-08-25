@@ -35,7 +35,8 @@ class ActionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $actionId = (new Action)->store($request);
+        return redirect(url()->previous())->withMessage('Action record inserted successfully');
     }
 
     /**
@@ -81,7 +82,7 @@ class ActionController extends Controller
     public function destroy($actionId)
     {
         $user = (new Action)->where('id', $actionId)->firstorfail()->delete();
-        return redirect(url()->previous())->withMessage('Record deleted successfully');
+        return redirect(url()->previous())->withMessage('Action record deleted successfully');
     }
 
     public function getActionDetails($actionId)

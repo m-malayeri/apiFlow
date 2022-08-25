@@ -36,7 +36,7 @@ class FlowNodeController extends Controller
     public function store(Request $request)
     {
         $flowNodeId = (new FlowNode)->store($request);
-        return redirect(url()->previous())->withMessage('Record inserted successfully');
+        return redirect(url()->previous())->withMessage('Node record inserted successfully');
     }
 
     /**
@@ -82,7 +82,7 @@ class FlowNodeController extends Controller
     public function destroy($flowNodeId)
     {
         $user = (new FlowNode)->where('id', $flowNodeId)->firstorfail()->delete();
-        return redirect(url()->previous())->withMessage('Record deleted successfully');
+        return redirect(url()->previous())->withMessage('Node record deleted successfully');
     }
 
     public function getFlowNodes($flowId)

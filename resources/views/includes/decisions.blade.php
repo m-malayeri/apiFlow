@@ -1,10 +1,3 @@
-@if (Session::has('message'))
-<div class="alert alert-success well-sm" role="alert">{{ Session::get('message') }}</div>
-@endif
-@if (Session::has('error'))
-<div class="alert alert-danger well-sm" role="alert">{{ Session::get('error') }}</div>
-@endif
-
 <button type="button" class="btn btn-primary my-flow-btn" data-bs-toggle="modal" data-bs-target="#decisionModal">New Decision</button>
 
 <div class="modal fade" id="decisionModal" tabindex="-1" aria-labelledby="decisionModalLabel" aria-hidden="true">
@@ -15,17 +8,30 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-				<form method="post" action="{{url('node')}}">
+				<form method="post" action="{{url('decision')}}">
 					<div class="mb-3">
 						@csrf
 						<input type="hidden" class="form-control" id="flow_id" name="flow_id" value="{{$flowDetails->id}}" required>
-						<input type="hidden" class="form-control" id="node_seq" name="node_seq" value="{{$maxSeq+1}}" required>
 
-						<label for="node_type" class="col-form-label">Node Type</label>
-						<input type="text" class="form-control" id="node_type" name="node_type" required>
+						<label for="decision_name" class="col-form-label">Decision Name</label>
+						<input type="text" class="form-control" id="decision_name" name="decision_name" required>
 
-						<label for="node_spec_id" class="col-form-label">Node Spec Id</label>
-						<input type="text" class="form-control" id="node_spec_id" name="node_spec_id" required>
+						<label for="flow_node_id" class="col-form-label">Flow Node Id</label>
+						<input type="text" class="form-control" id="flow_node_id" name="flow_node_id" required>
+
+						<label for="prop_name" class="col-form-label">Property Name</label>
+						<input type="text" class="form-control" id="prop_name" name="prop_name" required>
+
+						<label for="decision_type" class="form-label">Decision Typ</label>
+						<select id="decision_type" class="form-select" name="decision_type">
+							<option selected>Equal</option>
+							<option>Not Equal</option>
+							<option>Greater Than</option>
+							<option>Less Than</option>
+						</select>
+
+						<label for="prop_value" class="col-form-label">Property Value</label>
+						<input type="text" class="form-control" id="prop_value" name="prop_value" required>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

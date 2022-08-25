@@ -37,9 +37,9 @@ class FlowController extends Controller
 	{
 		$flowId = (new Flow)->store($request);
 		if (isset($flowId)) {
-			return redirect('/')->withMessage('Record inserted successfully');
+			return redirect(url()->previous())->withMessage('Record inserted successfully');
 		} else {
-			return redirect('/')->withError('Duplicate record is not allowed, please try again with another name');
+			return redirect(url()->previous())->withError('Duplicate record is not allowed, please try again with another name');
 		}
 	}
 
