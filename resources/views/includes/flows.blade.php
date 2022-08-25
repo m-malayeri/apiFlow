@@ -26,6 +26,7 @@
 							<option selected>All</option>
 							<option>Property</option>
 							<option>Session</option>
+							<option>None</option>
 						</select>
 					</div>
 					<div class="modal-footer">

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\FlowNodeController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\PropertyController;
-use App\Http\Controllers\ActionController;
 use App\Http\Controllers\DecisionController;
 use App\Http\Controllers\InvokeController;
 use App\Http\Controllers\InvokeInputController;
@@ -72,14 +71,18 @@ class MainController extends Controller
         } else {
             if ($flowDetails->status == "Enabled") {
                 $flowNodes = (new FlowNodeController)->getFlowNodes($flowDetails->id);
-                $decisionResult = "true";
+                $decisionResult = true;
+                $end = false;
+                $currentNodeId = (new FlowNodeController)->getFirstNodeId($flowDetails->id);
+                $lastNodeId = (new FlowNodeController)->getLastNodeId($flowDetails->id);
 
-                foreach ($flowNodes as $flowNode) {
+                while ($end == false && $currentNodeId <= $lastNodeId) {
+                    $flowNode = $flowNodes->where('id', $currentNodeId)->first();
                     $nodeType = $flowNode->node_type;
                     $nodeSubType = $flowNode->sub_type;
-                    if ($nodeType == "Action" && $decisionResult == "true") {
-                        if ($nodeSubType == "Invoke") {
 
+                    if ($nodeType == "Action" && $decisionResult == true) {
+                        if ($nodeSubType == "Invoke") {
                             // Get invoke details
                             $invokeDetails = (new InvokeController)->getInvokeDetails($flowDetails->id, $flowNode->id);
                             $invokeInputs = (new InvokeInputController)->getInvokeInputs($invokeDetails->id);
@@ -88,17 +91,24 @@ class MainController extends Controller
                             // Invoke
                             $invokeResults = $this->invoke($request, $invokeDetails, $invokeInputs);
 
-
                             // Log properties
                             (new PropertyController)->store($invokeResults, $invokeOutputs, $sessionId);
+
+                            $currentNodeId += 1;
                         }
-                    } else if ($nodeType == "Decision" && $decisionResult == "true") {
+                    } else if ($nodeType == "Decision" && $decisionResult == true) {
                         // Get decision details
                         $decisionDetails = (new DecisionController)->getDecisionDetails($flowNode->id);
                         $propertyDetails = (new PropertyController)->getPropertyDetails($decisionDetails->prop_name, $sessionId);
 
-                        // Decide
+                        // Decide and find next node id
                         $decisionResult = $this->decide($propertyDetails, $decisionDetails);
+
+                        if ($decisionResult == true) {
+                            $currentNodeId = $decisionDetails->next_node_id;
+                        } else {
+                            $end = true;
+                        }
                     }
                 }
 
@@ -118,10 +128,13 @@ class MainController extends Controller
                     $flowResponse->ResponseDescription = "Unable to fetch latest action properties";
                 }
 
-                // Destroy session and properties based on flow config.
+                // Clear sessions and properties based on flow config.
                 if ($flowDetails->log_level == "Property") {
                     (new SessionController)->destroy($sessionId);
                 } else if ($flowDetails->log_level == "Session") {
+                    (new PropertyController)->destroy($sessionId);
+                } else if ($flowDetails->log_level == "None") {
+                    (new SessionController)->destroy($sessionId);
                     (new PropertyController)->destroy($sessionId);
                 }
 

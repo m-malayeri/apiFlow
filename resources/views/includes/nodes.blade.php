@@ -49,7 +49,6 @@
 	<thead>
 		<tr>
 			<th scope="col">#</th>
-			<th scope="col">Flow Id</th>
 			<th scope="col">Node Name</th>
 			<th scope="col">Node Type</th>
 			<th scope="col">Sub Type</th>
@@ -62,7 +61,6 @@
 		@foreach($flowNodes as $flowNode)
 		<tr>
 			<th scope="row">{{$flowNode->id}}</th>
-			<td>{{$flowNode->flow_id}}</td>
 			<td>{{$flowNode->node_name}}</td>
 			<td>{{$flowNode->node_type}}</td>
 			<td>{{$flowNode->sub_type}}</td>

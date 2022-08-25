@@ -49,7 +49,7 @@
 	<thead>
 		<tr>
 			<th scope="col">#</th>
-			<th scope="col">Flow Node Id</th>
+			<th scope="col">Node Id</th>
 			<th scope="col">Property Name</th>
 			<th scope="col">Decision Type</th>
 			<th scope="col">Property Value</th>

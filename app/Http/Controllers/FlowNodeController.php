@@ -90,4 +90,16 @@ class FlowNodeController extends Controller
         $result = (new FlowNode)->getFlowNodes($flowId);
         return $result;
     }
+
+    public function getFirstNodeId($flowId)
+    {
+        $result = (new FlowNode)->getFirstNodeId($flowId);
+        return $result;
+    }
+
+    public function getLastNodeId($flowId)
+    {
+        $result = (new FlowNode)->getLastNodeId($flowId);
+        return $result;
+    }
 }

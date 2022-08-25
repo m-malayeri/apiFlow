@@ -14,9 +14,15 @@ class FlowNode extends Model
         else return null;
     }
 
-    public function getLastNodeId($flowId, $nodeType)
+    public function getLastNodeId($flowId)
     {
-        $result = FlowNode::where(['flow_id' => $flowId, 'node_type' => $nodeType])->max('node_seq');
+        $result = FlowNode::where(['flow_id' => $flowId])->orderBy('node_seq', 'DESC')->first()->id;
+        return $result;
+    }
+
+    public function getFirstNodeId($flowId)
+    {
+        $result = FlowNode::where(['flow_id' => $flowId])->orderBy('node_seq', 'ASC')->first()->id;
         return $result;
     }
 
