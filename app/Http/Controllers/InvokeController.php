@@ -35,7 +35,8 @@ class InvokeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $invokeId = (new Invoke)->store($request);
+        return redirect(url()->previous())->withMessage('Invoke record inserted successfully');
     }
 
     /**
@@ -83,9 +84,15 @@ class InvokeController extends Controller
         //
     }
 
-    public function getInvokeDetails($invokeId)
+    public function getInvokeDetails($flowId, $flowNodeId)
     {
-        $result = (new Invoke)->getInvokeDetails($invokeId);
+        $result = (new Invoke)->getInvokeDetails($flowId, $flowNodeId);
+        return $result;
+    }
+
+    public function getFlowInvokes($flowId)
+    {
+        $result = (new Invoke)->getFlowInvokes($flowId);
         return $result;
     }
 }

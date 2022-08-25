@@ -16,9 +16,10 @@ class CreateFlowNodesTable extends Migration
         Schema::create('flow_nodes', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('flow_id');
+            $table->text('node_name');
             $table->text('node_type');
+            $table->text('sub_type');
             $table->integer('node_seq');
-            $table->integer('node_spec_id');
             $table->timestamps();
         });
     }

@@ -13,12 +13,6 @@
 						@csrf
 						<input type="hidden" class="form-control" id="flow_id" name="flow_id" value="{{$flowDetails->id}}" required>
 
-						<label for="decision_name" class="col-form-label">Decision Name</label>
-						<input type="text" class="form-control" id="decision_name" name="decision_name" required>
-
-						<label for="flow_node_id" class="col-form-label">Flow Node Id</label>
-						<input type="text" class="form-control" id="flow_node_id" name="flow_node_id" required>
-
 						<label for="prop_name" class="col-form-label">Property Name</label>
 						<input type="text" class="form-control" id="prop_name" name="prop_name" required>
 
@@ -32,6 +26,10 @@
 
 						<label for="prop_value" class="col-form-label">Property Value</label>
 						<input type="text" class="form-control" id="prop_value" name="prop_value" required>
+
+						<label for="next_node_id" class="col-form-label">Next Node Id</label>
+						<input type="text" class="form-control" id="next_node_id" name="next_node_id" required>
+
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -48,11 +46,10 @@
 	<thead>
 		<tr>
 			<th scope="col">#</th>
-			<th scope="col">Decision Name</th>
-			<th scope="col">Flow Node Id</th>
 			<th scope="col">Property Name</th>
 			<th scope="col">Decision Type</th>
 			<th scope="col">Property Value</th>
+			<th scope="col">Next Node Id</th>
 			<th scope="col">Manage</th>
 		</tr>
 	</thead>
@@ -60,11 +57,10 @@
 		@foreach($decisions as $decision)
 		<tr>
 			<th scope="row">{{$decision->id}}</th>
-			<td>{{$decision->decision_name}}</td>
-			<td>{{$decision->flow_node_id}}</td>
 			<td>{{$decision->prop_name}}</td>
 			<td>{{$decision->decision_type}}</td>
 			<td>{{$decision->prop_value}}</td>
+			<td>{{$decision->next_node_id}}</td>
 			<td class="my-decision-icons">
 				<a href="{{url('decision/delete/'.$decision->id)}}"><i class="fa fa-remove"></i></a>
 			</td>

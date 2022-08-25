@@ -17,7 +17,7 @@
                         <button class="nav-link active" id="nodes-tab" data-bs-toggle="tab" data-bs-target="#nodes" type="button" role="tab" aria-controls="nodes" aria-selected="true">Nodes</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="actions-tab" data-bs-toggle="tab" data-bs-target="#actions" type="button" role="tab" aria-controls="actions" aria-selected="false">Actions</button>
+                        <button class="nav-link" id="invokes-tab" data-bs-toggle="tab" data-bs-target="#invokes" type="button" role="tab" aria-controls="invokes" aria-selected="false">Invokes</button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="decisions-tab" data-bs-toggle="tab" data-bs-target="#decisions" type="button" role="tab" aria-controls="decisions" aria-selected="false">Decisions</button>
@@ -27,8 +27,8 @@
                     <div class="tab-pane fade show active" id="nodes" role="tabpanel" aria-labelledby="nodes-tab">
                         @include('includes.nodes')
                     </div>
-                    <div class="tab-pane fade" id="actions" role="tabpanel" aria-labelledby="actions-tab">
-                        @include('includes.actions')
+                    <div class="tab-pane fade" id="invokes" role="tabpanel" aria-labelledby="invokes-tab">
+                        @include('includes.invokes')
                     </div>
                     <div class="tab-pane fade" id="decisions" role="tabpanel" aria-labelledby="decisions-tab">
                         @include('includes.decisions')

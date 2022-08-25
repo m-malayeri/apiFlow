@@ -19,7 +19,9 @@
 					<div class="mb-3">
 						@csrf
 						<input type="hidden" class="form-control" id="flow_id" name="flow_id" value="{{$flowDetails->id}}" required>
-						<input type="hidden" class="form-control" id="node_seq" name="node_seq" value="{{$maxSeq+1}}" required>
+
+						<label for="node_name" class="col-form-label">Node Name</label>
+						<input type="text" class="form-control" id="node_name" name="node_name" required>
 
 						<label for="node_type" class="form-label">Node Type</label>
 						<select id="node_type" class="form-select" name="node_type">
@@ -27,8 +29,10 @@
 							<option>Decision</option>
 						</select>
 
-						<label for="node_spec_id" class="col-form-label">Node Spec Id</label>
-						<input type="text" class="form-control" id="node_spec_id" name="node_spec_id" required>
+						<label for="sub_type" class="col-form-label">Sub Type</label>
+						<input type="text" class="form-control" id="sub_type" name="sub_type" required>
+
+						<input type="hidden" class="form-control" id="node_seq" name="node_seq" value="{{$maxSeq+1}}" required>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -46,9 +50,9 @@
 		<tr>
 			<th scope="col">#</th>
 			<th scope="col">Flow Id</th>
+			<th scope="col">Node Name</th>
 			<th scope="col">Node Type</th>
-			<th scope="col">Node Seq</th>
-			<th scope="col">Node Spec Id</th>
+			<th scope="col">Sub Type</th>
 			<th scope="col">Created At</th>
 			<th scope="col">Updated At</th>
 			<th scope="col">Manage</th>
@@ -59,9 +63,9 @@
 		<tr>
 			<th scope="row">{{$flowNode->id}}</th>
 			<td>{{$flowNode->flow_id}}</td>
+			<td>{{$flowNode->node_name}}</td>
 			<td>{{$flowNode->node_type}}</td>
-			<td>{{$flowNode->node_seq}}</td>
-			<td>{{$flowNode->node_spec_id}}</td>
+			<td>{{$flowNode->sub_type}}</td>
 			<td>{{$flowNode->created_at}}</td>
 			<td>{{$flowNode->updated_at}}</td>
 			<td class="my-icons">

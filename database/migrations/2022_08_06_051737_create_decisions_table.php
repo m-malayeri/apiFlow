@@ -15,11 +15,11 @@ class CreateDecisionsTable extends Migration
     {
         Schema::create('decisions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->text('decision_name');
-            $table->integer('flow_node_id');
+            $table->integer('flow_id');
             $table->text('prop_name');
             $table->text('decision_type');
             $table->text('prop_value');
+            $table->integer('next_node_id');
             $table->timestamps();
         });
     }

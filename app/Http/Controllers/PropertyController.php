@@ -33,10 +33,22 @@ class PropertyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($invokeResults, $sessionId, $flowNodeId)
+    public function store($invokeResults, $invokeOutputs, $sessionId)
     {
-        $result = (new Property)->store($invokeResults, $sessionId, $flowNodeId);
-        return $result;
+        foreach (json_decode($invokeResults) as $propName => $propValue) {
+            foreach ($invokeOutputs as $invokeOutput) {
+                if ($invokeOutput->output_name == $propName) {
+                    $array = array(
+                        'session_id' => $sessionId,
+                        'property_name' => $invokeOutput->save_as_prop_name,
+                        'property_value' => $propValue,
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    );
+                    (new Property)->store($array);
+                }
+            }
+        }
     }
 
     /**
@@ -84,9 +96,9 @@ class PropertyController extends Controller
         Property::where('session_id', $id)->delete();
     }
 
-    public function getPropertyDetails($propertyName, $sessionId, $flowNodeId)
+    public function getPropertyDetails($propertyName, $sessionId)
     {
-        $result = (new Property)->getPropertyDetails($propertyName, $sessionId, $flowNodeId);
+        $result = (new Property)->getPropertyDetails($propertyName, $sessionId);
         return $result;
     }
 }

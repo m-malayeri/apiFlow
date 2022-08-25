@@ -17,6 +17,7 @@ class CreateInvokeOutputsTable extends Migration
             $table->bigIncrements('id');
             $table->integer('invoke_id');
             $table->text('output_name');
+            $table->text('save_as_prop_name');
             $table->timestamps();
         });
     }

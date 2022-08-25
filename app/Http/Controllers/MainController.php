@@ -31,10 +31,10 @@ class MainController extends Controller
         $flowNodes = (new FlowNodeController)->getFlowNodes($flowId);
         $maxSeq = count($flowNodes);
 
-        $actions = (new ActionController)->getFlowActions($flowId);
+        $invokes = (new InvokeController)->getFlowInvokes($flowId);
         $decisions = (new DecisionController)->getFlowDecisions($flowId);
 
-        return view('nodes')->with(compact('flowDetails', 'flowNodes', 'maxSeq', 'actions', 'decisions'));
+        return view('nodes')->with(compact('flowDetails', 'flowNodes', 'maxSeq', 'invokes', 'decisions'));
     }
 
     public function execute($flowName, Request $request)
@@ -59,24 +59,25 @@ class MainController extends Controller
 
             foreach ($flowNodes as $flowNode) {
                 $nodeType = $flowNode->node_type;
+                $nodeSubType = $flowNode->sub_type;
                 if ($nodeType == "Action" && $decisionResult == "true") {
-                    $actionDetails = (new ActionController)->getActionDetails($flowNode->node_spec_id);
+                    if ($nodeSubType == "Invoke") {
 
-                    if ($actionDetails->action_type == "Invoke") {
                         // Get invoke details
-                        $invokeDetails = (new InvokeController)->getInvokeDetails($actionDetails->action_spec_id);
+                        $invokeDetails = (new InvokeController)->getInvokeDetails($flowDetails->id, $flowNode->id);
                         $invokeInputs = (new InvokeInputController)->getInvokeInputs($invokeDetails->id);
+                        $invokeOutputs = (new InvokeOutputController)->getInvokeOutputs($invokeDetails->id);
 
                         // Invoke
                         $invokeResults = $this->invoke($request, $invokeDetails, $invokeInputs);
 
                         // Log properties
-                        (new PropertyController)->store($invokeResults, $sessionId, $flowNode->id);
+                        (new PropertyController)->store($invokeResults, $invokeOutputs, $sessionId);
                     }
                 } else if ($nodeType == "Decision" && $decisionResult == "true") {
                     // Get decision details
-                    $decisionDetails = (new DecisionController)->getDecisionDetails($flowNode->node_spec_id);
-                    $propertyDetails = (new PropertyController)->getPropertyDetails($decisionDetails->prop_name, $sessionId, $decisionDetails->flow_node_id);
+                    $decisionDetails = (new DecisionController)->getDecisionDetails($flowDetails->id);
+                    $propertyDetails = (new PropertyController)->getPropertyDetails($decisionDetails->prop_name, $sessionId);
 
                     // Decide
                     $decisionResult = $this->decide($propertyDetails, $decisionDetails);

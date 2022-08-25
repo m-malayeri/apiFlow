@@ -14,28 +14,15 @@ class Property extends Model
      */
     protected $table = 'propertys';
 
-    public function store($invokeResults, $sessionId, $flowNodeId)
+    public function store($array)
     {
-        foreach (json_decode($invokeResults) as $propName => $propValue) {
-            $array = array(
-                'session_id' => $sessionId,
-                'flow_node_id' => $flowNodeId,
-                'property_name' => $propName,
-                'property_value' => $propValue,
-                'created_at' => now(),
-                'updated_at' => now()
-            );
-            Property::insert($array);
-        }
+        Property::insert($array);
         return "true";
     }
 
-    public function getPropertyDetails($propertyName, $sessionId, $flowNodeId)
+    public function getPropertyDetails($propertyName, $sessionId)
     {
-        $result = Property::where(
-            ['property_name' => $propertyName, 'session_id' => $sessionId, 'flow_node_id' => $flowNodeId]
-        )->get();
-
+        $result = Property::where(['property_name' => $propertyName, 'session_id' => $sessionId])->get();
         if (count($result) > 0)
             return $result[0];
         else return null;
