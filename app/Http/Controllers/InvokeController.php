@@ -79,9 +79,10 @@ class InvokeController extends Controller
      * @param  \App\Invoke  $invoke
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Invoke $invoke)
+    public function destroy($invokeId)
     {
-        //
+        $result = (new Invoke)->where('id', $invokeId)->firstorfail()->delete();
+        return redirect(url()->previous())->withMessage('Invoke record deleted successfully');
     }
 
     public function getInvokeDetails($flowId, $flowNodeId)

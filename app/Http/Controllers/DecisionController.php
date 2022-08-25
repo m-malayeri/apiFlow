@@ -85,9 +85,9 @@ class DecisionController extends Controller
         return redirect(url()->previous())->withMessage('Decision record deleted successfully');
     }
 
-    public function getDecisionDetails($decisionId)
+    public function getDecisionDetails($flowNodeId)
     {
-        $result = (new Decision)->getDecisionDetails($decisionId);
+        $result = (new Decision)->getDecisionDetails($flowNodeId);
         return $result;
     }
 

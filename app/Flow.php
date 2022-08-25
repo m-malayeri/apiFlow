@@ -17,7 +17,9 @@ class Flow extends Model
     public function getFlowDetailsById($flowId)
     {
         $result = Flow::where('id', $flowId)->get();
-        return $result;
+        if (count($result) > 0)
+            return $result[0];
+        else return null;
     }
 
     public function getAllFlows()

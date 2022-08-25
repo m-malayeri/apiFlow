@@ -21,7 +21,7 @@ class Invoke extends Model
             'created_at' => now(),
             'updated_at' => now()
         );
-        Action::insert($array);
+        Invoke::insert($array);
         $invokeId = Invoke::get()->last()->id;
         return $invokeId;
     }

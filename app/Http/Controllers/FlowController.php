@@ -99,7 +99,7 @@ class FlowController extends Controller
 	public function getFlowDetailsById($flowId)
 	{
 		$result = (new Flow)->getFlowDetailsById($flowId);
-		return $result[0];
+		return $result;
 	}
 
 	public function getAllFlows()

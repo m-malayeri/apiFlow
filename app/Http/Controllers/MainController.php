@@ -27,14 +27,27 @@ class MainController extends Controller
 
     public function getFlowData($flowId)
     {
-        $flowDetails = (new FlowController)->getFlowDetailsById($flowId);
-        $flowNodes = (new FlowNodeController)->getFlowNodes($flowId);
-        $maxSeq = count($flowNodes);
+        if (isset($flowId)) {
+            $flowDetails = (new FlowController)->getFlowDetailsById($flowId);
+            if ($flowDetails === null) {
+                return redirect(url('/'));
+            } else {
+                $flowNodes = (new FlowNodeController)->getFlowNodes($flowId);
+                $maxSeq = count($flowNodes);
 
-        $invokes = (new InvokeController)->getFlowInvokes($flowId);
-        $decisions = (new DecisionController)->getFlowDecisions($flowId);
+                $invokes = (new InvokeController)->getFlowInvokes($flowId);
+                $decisions = (new DecisionController)->getFlowDecisions($flowId);
 
-        return view('nodes')->with(compact('flowDetails', 'flowNodes', 'maxSeq', 'invokes', 'decisions'));
+                return view('nodes')->with(compact('flowDetails', 'flowNodes', 'maxSeq', 'invokes', 'decisions'));
+            }
+        } else {
+            return view('welcome');
+        }
+    }
+
+    public function redirect()
+    {
+        return redirect(url('/'));
     }
 
     public function execute($flowName, Request $request)
@@ -71,12 +84,13 @@ class MainController extends Controller
                         // Invoke
                         $invokeResults = $this->invoke($request, $invokeDetails, $invokeInputs);
 
+
                         // Log properties
                         (new PropertyController)->store($invokeResults, $invokeOutputs, $sessionId);
                     }
                 } else if ($nodeType == "Decision" && $decisionResult == "true") {
                     // Get decision details
-                    $decisionDetails = (new DecisionController)->getDecisionDetails($flowDetails->id);
+                    $decisionDetails = (new DecisionController)->getDecisionDetails($flowNode->id);
                     $propertyDetails = (new PropertyController)->getPropertyDetails($decisionDetails->prop_name, $sessionId);
 
                     // Decide

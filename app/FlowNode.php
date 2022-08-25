@@ -24,9 +24,10 @@ class FlowNode extends Model
     {
         $array = array(
             'flow_id' => $request->input('flow_id'),
+            'node_name' => $request->input('node_name'),
             'node_type' => $request->input('node_type'),
+            'sub_type' => $request->input('sub_type'),
             'node_seq' => $request->input('node_seq'),
-            'node_spec_id' => $request->input('node_spec_id'),
             'created_at' => now(),
             'updated_at' => now()
         );

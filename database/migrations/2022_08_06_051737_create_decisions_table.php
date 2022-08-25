@@ -16,6 +16,7 @@ class CreateDecisionsTable extends Migration
         Schema::create('decisions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('flow_id');
+            $table->integer('flow_node_id');
             $table->text('prop_name');
             $table->text('decision_type');
             $table->text('prop_value');

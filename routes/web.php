@@ -21,11 +21,15 @@ Route::get('flow/enable/{flowId}', array('uses' => 'FlowController@enable'));
 Route::get('flow/delete/{flowId}', array('uses' => 'FlowController@destroy'));
 
 Route::get('node/{flowId}', array('uses' => 'MainController@getFlowData'));
+Route::get('node', array('uses' => 'MainController@redirect'));
 Route::post('node', array('uses' => 'FlowNodeController@store'));
 Route::get('node/delete/{flowId}', array('uses' => 'FlowNodeController@destroy'));
 
 Route::post('action', array('uses' => 'ActionController@store'));
 Route::get('action/delete/{actionId}', array('uses' => 'ActionController@destroy'));
+
+Route::post('invoke', array('uses' => 'InvokeController@store'));
+Route::get('invoke/delete/{invokeId}', array('uses' => 'InvokeController@destroy'));
 
 Route::post('decision', array('uses' => 'DecisionController@store'));
 Route::get('decision/delete/{decisionId}', array('uses' => 'DecisionController@destroy'));

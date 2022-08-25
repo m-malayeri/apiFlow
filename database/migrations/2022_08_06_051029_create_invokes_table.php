@@ -19,8 +19,8 @@ class CreateInvokesTable extends Migration
             $table->text('method');
             $table->text('content_type');
             $table->text('auth_type');
-            $table->text('user');
-            $table->text('password');
+            $table->text('user')->nullable()->change();
+            $table->text('password')->nullable()->change();
             $table->text('req_parent_object')->nullable()->change();
             $table->timestamps();
         });

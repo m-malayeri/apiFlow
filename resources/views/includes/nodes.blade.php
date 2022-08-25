@@ -30,7 +30,7 @@
 						</select>
 
 						<label for="sub_type" class="col-form-label">Sub Type</label>
-						<input type="text" class="form-control" id="sub_type" name="sub_type" required>
+						<input type="text" class="form-control" id="sub_type" name="sub_type">
 
 						<input type="hidden" class="form-control" id="node_seq" name="node_seq" value="{{$maxSeq+1}}" required>
 					</div>

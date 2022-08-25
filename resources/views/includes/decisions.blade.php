@@ -13,6 +13,9 @@
 						@csrf
 						<input type="hidden" class="form-control" id="flow_id" name="flow_id" value="{{$flowDetails->id}}" required>
 
+						<label for="flow_node_id" class="col-form-label">Flow Node Id</label>
+						<input type="text" class="form-control" id="flow_node_id" name="flow_node_id" required>
+
 						<label for="prop_name" class="col-form-label">Property Name</label>
 						<input type="text" class="form-control" id="prop_name" name="prop_name" required>
 
@@ -46,6 +49,7 @@
 	<thead>
 		<tr>
 			<th scope="col">#</th>
+			<th scope="col">Flow Node Id</th>
 			<th scope="col">Property Name</th>
 			<th scope="col">Decision Type</th>
 			<th scope="col">Property Value</th>
@@ -57,6 +61,7 @@
 		@foreach($decisions as $decision)
 		<tr>
 			<th scope="row">{{$decision->id}}</th>
+			<td>{{$decision->flow_node_id}}</td>
 			<td>{{$decision->prop_name}}</td>
 			<td>{{$decision->decision_type}}</td>
 			<td>{{$decision->prop_value}}</td>

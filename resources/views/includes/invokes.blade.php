@@ -36,13 +36,13 @@
 						</select>
 
 						<label for="user" class="col-form-label">User</label>
-						<input type="text" class="form-control" id="user" name="user" required>
+						<input type="text" class="form-control" id="user" name="user">
 
 						<label for="password" class="col-form-label">Password</label>
-						<input type="password" class="form-control" id="password" name="password" required>
+						<input type="password" class="form-control" id="password" name="password">
 
 						<label for="req_parent_object" class="col-form-label">Request Parent Object</label>
-						<input type="text" class="form-control" id="req_parent_object" name="req_parent_object" required>
+						<input type="text" class="form-control" id="req_parent_object" name="req_parent_object">
 
 					</div>
 					<div class="modal-footer">
@@ -60,14 +60,12 @@
 	<thead>
 		<tr>
 			<th scope="col">#</th>
-			<th scope="col">Flow Node Id</th>
+			<th scope="col">Node Id</th>
 			<th scope="col">URL</th>
 			<th scope="col">Method</th>
 			<th scope="col">Content Type</th>
 			<th scope="col">Auth Type</th>
 			<th scope="col">REQ Parent Object</th>
-			<th scope="col">Created At</th>
-			<th scope="col">Updated At</th>
 			<th scope="col">Manage</th>
 		</tr>
 	</thead>
@@ -81,8 +79,6 @@
 			<td>{{$invoke->content_type}}</td>
 			<td>{{$invoke->auth_type}}</td>
 			<td>{{$invoke->req_parent_obg}}</td>
-			<td>{{$invoke->created_at}}</td>
-			<td>{{$invoke->updated_at}}</td>
 			<td class="my-action-icons">
 				<a href="{{url('invoke/delete/'.$invoke->id)}}"><i class="fa fa-remove"></i></a>
 			</td>
