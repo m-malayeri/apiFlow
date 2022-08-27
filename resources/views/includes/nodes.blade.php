@@ -25,14 +25,14 @@
 
 						<label for="node_type" class="form-label">Node Type</label>
 						<select id="node_type" class="form-select" name="node_type">
-							<option selected>Action</option>
+							<option selected>Start</option>
+							<option>Action</option>
 							<option>Decision</option>
+							<option>End</option>
 						</select>
 
 						<label for="sub_type" class="col-form-label">Sub Type</label>
 						<input type="text" class="form-control" id="sub_type" name="sub_type">
-
-						<input type="hidden" class="form-control" id="node_seq" name="node_seq" value="{{$maxSeq+1}}" required>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

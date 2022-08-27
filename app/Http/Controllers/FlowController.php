@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Flow;
+use App\FlowNode;
 use Illuminate\Http\Request;
 
 class FlowController extends Controller
@@ -37,6 +38,7 @@ class FlowController extends Controller
 	{
 		$flowId = (new Flow)->store($request);
 		if (isset($flowId)) {
+			(new FlowNode)->init($flowId);
 			return redirect(url()->previous())->withMessage('Record inserted successfully');
 		} else {
 			return redirect(url()->previous())->withError('Duplicate record is not allowed, please try again with another name');

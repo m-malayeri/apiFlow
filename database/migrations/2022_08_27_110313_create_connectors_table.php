@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateInvokeInputsTable extends Migration
+class CreateConnectorsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,12 @@ class CreateInvokeInputsTable extends Migration
      */
     public function up()
     {
-        Schema::create('invoke_inputs', function (Blueprint $table) {
+        Schema::create('connectors', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('flow_id');
-            $table->integer('invoke_id');
-            $table->text('input_name');
-            $table->text('input_type');
-            $table->text('literal_value');
-            $table->text('api_input_name');
+            $table->text('src_type');
+            $table->integer('src_id');
+            $table->text('target_type');
+            $table->integer('target_id');
             $table->timestamps();
         });
     }
@@ -32,6 +30,6 @@ class CreateInvokeInputsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('invoke_inputs');
+        Schema::dropIfExists('connectors');
     }
 }

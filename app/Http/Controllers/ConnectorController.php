@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Decision;
+use App\Connector;
 use Illuminate\Http\Request;
 
-class DecisionController extends Controller
+class ConnectorController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -35,17 +35,16 @@ class DecisionController extends Controller
      */
     public function store(Request $request)
     {
-        $decisionId = (new Decision)->store($request);
-        return redirect(url()->previous())->withMessage('Decision record inserted successfully');
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Decision  $decision
+     * @param  \App\Connector  $connector
      * @return \Illuminate\Http\Response
      */
-    public function show(Decision $decision)
+    public function show(Connector $connector)
     {
         //
     }
@@ -53,10 +52,10 @@ class DecisionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Decision  $decision
+     * @param  \App\Connector  $connector
      * @return \Illuminate\Http\Response
      */
-    public function edit(Decision $decision)
+    public function edit(Connector $connector)
     {
         //
     }
@@ -65,10 +64,10 @@ class DecisionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Decision  $decision
+     * @param  \App\Connector  $connector
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Decision $decision)
+    public function update(Request $request, Connector $connector)
     {
         //
     }
@@ -76,30 +75,17 @@ class DecisionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Decision  $decision
+     * @param  \App\Connector  $connector
      * @return \Illuminate\Http\Response
      */
-    public function destroy($decisionId)
+    public function destroy(Connector $connector)
     {
-        $user = (new Decision)->where('id', $decisionId)->firstorfail()->delete();
-        return redirect(url()->previous())->withMessage('Decision record deleted successfully');
+        //
     }
 
-    public function getDecisionLines($flowNodeId)
+    public function getNextNodeId($flowNodeId, $nodeType)
     {
-        $result = (new Decision)->getDecisionLines($flowNodeId);
-        return $result;
-    }
-
-    public function getDecisionDetails($flowNodeId)
-    {
-        $result = (new Decision)->getDecisionDetails($flowNodeId);
-        return $result;
-    }
-
-    public function getFlowDecisions($flowId)
-    {
-        $result = (new Decision)->getFlowDecisions($flowId);
+        $result = (new Connector)->getNextNodeId($flowNodeId, $nodeType);
         return $result;
     }
 }

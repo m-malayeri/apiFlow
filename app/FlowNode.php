@@ -8,7 +8,7 @@ class FlowNode extends Model
 {
     public function getFlowNodes($flowId)
     {
-        $result = FlowNode::where('flow_id', $flowId)->orderBy('node_seq', 'ASC')->get();
+        $result = FlowNode::where('flow_id', $flowId)->get();
         if (count($result) > 0)
             return $result;
         else return null;
@@ -16,13 +16,13 @@ class FlowNode extends Model
 
     public function getLastNodeId($flowId)
     {
-        $result = FlowNode::where(['flow_id' => $flowId])->orderBy('node_seq', 'DESC')->first()->id;
+        $result = FlowNode::where(['flow_id' => $flowId])->first()->id;
         return $result;
     }
 
     public function getFirstNodeId($flowId)
     {
-        $result = FlowNode::where(['flow_id' => $flowId])->orderBy('node_seq', 'ASC')->first()->id;
+        $result = FlowNode::where(['flow_id' => $flowId, 'node_name' => "Start"])->first()->id;
         return $result;
     }
 
@@ -33,7 +33,21 @@ class FlowNode extends Model
             'node_name' => $request->input('node_name'),
             'node_type' => $request->input('node_type'),
             'sub_type' => $request->input('sub_type'),
-            'node_seq' => $request->input('node_seq'),
+            'created_at' => now(),
+            'updated_at' => now()
+        );
+        FlowNode::insert($array);
+        $flowNodeId = FlowNode::get()->last()->id;
+        return $flowNodeId;
+    }
+
+    public function init($flowId)
+    {
+        $array = array(
+            'flow_id' => $flowId,
+            'node_name' => "Start",
+            'node_type' => "Start",
+            'sub_type' => "",
             'created_at' => now(),
             'updated_at' => now()
         );

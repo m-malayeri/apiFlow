@@ -34,8 +34,4 @@ Route::get('invoke/delete/{invokeId}', array('uses' => 'InvokeController@destroy
 Route::post('decision', array('uses' => 'DecisionController@store'));
 Route::get('decision/delete/{decisionId}', array('uses' => 'DecisionController@destroy'));
 
-/*
-Route::get('/', function () {
-    return view('welcome');
-});
-*/
+Route::any('mock/{apiName}', array('uses' => 'MockController@execute'));

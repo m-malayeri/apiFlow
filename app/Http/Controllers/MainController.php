@@ -32,12 +32,9 @@ class MainController extends Controller
                 return redirect(url('/'));
             } else {
                 $flowNodes = (new FlowNodeController)->getFlowNodes($flowId);
-                $maxSeq = count($flowNodes);
-
                 $invokes = (new InvokeController)->getFlowInvokes($flowId);
                 $decisions = (new DecisionController)->getFlowDecisions($flowId);
-
-                return view('nodes')->with(compact('flowDetails', 'flowNodes', 'maxSeq', 'invokes', 'decisions'));
+                return view('nodes')->with(compact('flowDetails', 'flowNodes', 'invokes', 'decisions'));
             }
         } else {
             return view('welcome');
@@ -55,60 +52,90 @@ class MainController extends Controller
         $flowResponse = new \stdClass();
         $flowResponse->ResponseCode = "";
         $flowResponse->ResponseDescription = "";
+        $resCode = "";
+        $resDesc = "";
 
         // Log session
         $sessionId = (new SessionController)->store($request);
 
-        // Log REQ
+        // Log REQ in API Logs
         $apiLog = (new ApiLogController)->store($request, $sessionId);
 
-        // Get flow seq
+        // Get flow details
         $flowDetails = (new FlowController)->getFlowDetailsByName($flowName);
 
         if ($flowDetails === null) {
-            $flowResponse->ResponseCode = "-120";
-            $flowResponse->ResponseDescription = "Flow not found, please check flow name";
+            $resCode = "-100";
+            $resDesc = "Flow not found, please check flow name";
         } else {
             if ($flowDetails->status == "Enabled") {
-                $flowNodes = (new FlowNodeController)->getFlowNodes($flowDetails->id);
-                $decisionResult = true;
-                $end = false;
-                $currentNodeId = (new FlowNodeController)->getFirstNodeId($flowDetails->id);
-                $lastNodeId = (new FlowNodeController)->getLastNodeId($flowDetails->id);
 
-                while ($end == false && $currentNodeId <= $lastNodeId) {
+                $flowNodes = (new FlowNodeController)->getFlowNodes($flowDetails->id);
+                $currentNodeId = (new FlowNodeController)->getFirstNodeId($flowDetails->id);
+                $end = false;
+                $forceEnd = false;
+
+                while ($end == false && $forceEnd == false) {
+
                     $flowNode = $flowNodes->where('id', $currentNodeId)->first();
                     $nodeType = $flowNode->node_type;
                     $nodeSubType = $flowNode->sub_type;
-
-                    if ($nodeType == "Action" && $decisionResult == true) {
+                    if ($nodeType == "Start") {
+                        // If this is the start point of flow, move to next node
+                        $currentNodeId =  (new ConnectorController)->getNextNodeId($flowNode->id, "Start")->target_id;
+                    } else if ($nodeType == "Action") {
+                        // Different sub types can lead to different actions such as "Invoke", "Query" , ...
                         if ($nodeSubType == "Invoke") {
                             // Get invoke details
                             $invokeDetails = (new InvokeController)->getInvokeDetails($flowDetails->id, $flowNode->id);
                             $invokeInputs = (new InvokeInputController)->getInvokeInputs($invokeDetails->id);
                             $invokeOutputs = (new InvokeOutputController)->getInvokeOutputs($invokeDetails->id);
-
-                            // Invoke
-                            $invokeResults = $this->invoke($request, $invokeDetails, $invokeInputs);
-
-                            // Log properties
-                            (new PropertyController)->store($invokeResults, $invokeOutputs, $sessionId);
-
-                            $currentNodeId += 1;
+                            if (count($invokeDetails) > 0 && count($invokeInputs) > 0 && count($invokeOutputs) > 0) {
+                                // Invoke
+                                $invokeResults = $this->invoke($request, $invokeDetails, $invokeInputs);
+                                // Log properties
+                                (new PropertyController)->store($invokeResults, $invokeOutputs, $sessionId);
+                            } else {
+                                // In this case, one or more invoke entities are not configured correcylt and flow execution is failed
+                                $resCode = "-110";
+                                $resDesc = "Flow execution failed, please check invoke configurations";
+                                $forceEnd = true;
+                            }
                         }
-                    } else if ($nodeType == "Decision" && $decisionResult == true) {
-                        // Get decision details
-                        $decisionDetails = (new DecisionController)->getDecisionDetails($flowNode->id);
-                        $propertyDetails = (new PropertyController)->getPropertyDetails($decisionDetails->prop_name, $sessionId);
+                        $currentNodeId =  (new ConnectorController)->getNextNodeId($flowNode->id, "Invoke")->target_id;
+                    } else if ($nodeType == "Decision") {
+                        // Get decision lines
+                        $decisionLines = (new DecisionController)->getDecisionLines($flowNode->id);
+                        $finalResults = collect([]);
+                        foreach ($decisionLines as $decisionLine) {
+                            // Get property details
+                            $propertyDetails = (new PropertyController)->getPropertyDetails($decisionLine->prop_name, $sessionId);
 
-                        // Decide and find next node id
-                        $decisionResult = $this->decide($propertyDetails, $decisionDetails);
+                            // Decide and find next node id
+                            $decisionResult = $this->decide($propertyDetails, $decisionLine);
 
-                        if ($decisionResult == true) {
-                            $currentNodeId = $decisionDetails->next_node_id;
+                            $finalResult = new \stdClass();
+                            $finalResult->node_id = $flowNode->id;
+                            $finalResult->decision_id = $decisionLine->id;
+                            $finalResult->result = $decisionResult;
+                            $finalResults->push($finalResult);
+                        }
+
+                        $successCount = count($finalResults->where('result', true));
+                        if ($successCount == 1) {
+                            // In this case, only one decision result is true and flow execution can continue
+                            $successNode = $finalResults->where('result', true)->first()->decision_id;
+                            $currentNodeId =  (new DecisionController)->getDecisionDetails($successNode)->next_node_id;
                         } else {
-                            $end = true;
+                            // In this case, more than one decision result is true and flow execution is failed
+                            $resCode = "-115";
+                            $resDesc = "Flow execution failed, please check decision configurations";
+                            $forceEnd = true;
                         }
+                    } else if ($nodeType == "End") {
+                        $resCode = "0";
+                        $resDesc = "Flow execution completed successfully";
+                        $end = true;
                     }
                 }
 
@@ -116,35 +143,38 @@ class MainController extends Controller
                 if (isset($invokeResults)) {
                     $invokeResults = json_decode($invokeResults);
                     $flowResponse->LastActionResult = $invokeResults;
-                    if ($decisionResult == true) {
-                        $flowResponse->ResponseCode = "0";
-                        $flowResponse->ResponseDescription = "Flow execution completed successfully";
-                    } else {
-                        $flowResponse->ResponseCode = "-100";
-                        $flowResponse->ResponseDescription = "Flow execution failed";
-                    }
-                } else {
-                    $flowResponse->ResponseCode = "-110";
-                    $flowResponse->ResponseDescription = "Unable to fetch latest action properties";
                 }
 
-                // Clear sessions and properties based on flow config.
-                if ($flowDetails->log_level == "Property") {
-                    (new SessionController)->destroy($sessionId);
-                } else if ($flowDetails->log_level == "Session") {
-                    (new PropertyController)->destroy($sessionId);
-                } else if ($flowDetails->log_level == "None") {
-                    (new SessionController)->destroy($sessionId);
-                    (new PropertyController)->destroy($sessionId);
+                // Decide flow response code and append last action result into main response
+                if ($resCode == "") {
+                    $resCode = "-120";
+                    $resDesc = "Unknown flow response, please contact administrator";
                 }
 
                 // Update RSP and calculate duration
                 (new ApiLogController)->update($apiLog, $flowResponse);
             } else {
-                $flowResponse->ResponseCode = "-115";
-                $flowResponse->ResponseDescription = "Flow is disabled, please enable it via GUI";
+                $resCode = "-105";
+                $resDesc = "Flow is disabled, please enable it via GUI";
             }
         }
+
+        // Clear sessions and properties based on flow config
+        if ($flowDetails->log_level == "Property") {
+            (new SessionController)->destroy($sessionId);
+        } else if ($flowDetails->log_level == "Session") {
+            (new PropertyController)->destroy($sessionId);
+        } else if ($flowDetails->log_level == "None") {
+            (new SessionController)->destroy($sessionId);
+            (new PropertyController)->destroy($sessionId);
+        }
+
+        $flowResponse->ResponseCode = $resCode;
+        $flowResponse->ResponseDescription = $resDesc;
+
+        // Update RSP and calculate duration
+        (new ApiLogController)->update($apiLog, $flowResponse);
+
         return response()->json($flowResponse);
     }
 

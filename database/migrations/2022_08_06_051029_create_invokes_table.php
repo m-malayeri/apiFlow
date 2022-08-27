@@ -15,13 +15,15 @@ class CreateInvokesTable extends Migration
     {
         Schema::create('invokes', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('flow_id');
+            $table->integer('flow_node_id');
             $table->text('url');
             $table->text('method');
             $table->text('content_type');
             $table->text('auth_type');
-            $table->text('user')->nullable()->change();
-            $table->text('password')->nullable()->change();
-            $table->text('req_parent_object')->nullable()->change();
+            $table->text('user')->nullable();
+            $table->text('password')->nullable();
+            $table->text('req_parent_object')->nullable();
             $table->timestamps();
         });
     }

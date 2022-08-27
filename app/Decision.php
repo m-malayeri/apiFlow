@@ -6,9 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Decision extends Model
 {
-    public function getDecisionDetails($flowNodeId)
+    public function getDecisionLines($flowNodeId)
     {
         $result = Decision::where('flow_node_id', $flowNodeId)->get();
+        if (count($result) > 0)
+            return $result;
+        else return null;
+    }
+
+    public function getDecisionDetails($decisionId)
+    {
+        $result = Decision::where('id', $decisionId)->get();
         if (count($result) > 0)
             return $result[0];
         else return null;

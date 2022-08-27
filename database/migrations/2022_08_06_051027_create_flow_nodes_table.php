@@ -18,8 +18,7 @@ class CreateFlowNodesTable extends Migration
             $table->integer('flow_id');
             $table->text('node_name');
             $table->text('node_type');
-            $table->text('sub_type');
-            $table->integer('node_seq');
+            $table->text('sub_type')->nullable();
             $table->timestamps();
         });
     }
