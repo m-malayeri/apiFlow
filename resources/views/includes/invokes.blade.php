@@ -78,7 +78,7 @@
 			<td>{{$invoke->method}}</td>
 			<td>{{$invoke->content_type}}</td>
 			<td>{{$invoke->auth_type}}</td>
-			<td>{{$invoke->req_parent_obg}}</td>
+			<td>{{$invoke->req_parent_object}}</td>
 			<td class="my-action-icons">
 				<a href="{{url('invoke/delete/'.$invoke->id)}}"><i class="fa fa-remove"></i></a>
 			</td>

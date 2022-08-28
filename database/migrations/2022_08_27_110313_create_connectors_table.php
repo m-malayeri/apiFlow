@@ -15,6 +15,7 @@ class CreateConnectorsTable extends Migration
     {
         Schema::create('connectors', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('flow_id');
             $table->text('src_type');
             $table->integer('src_id');
             $table->text('target_type');

@@ -34,7 +34,8 @@ class MainController extends Controller
                 $flowNodes = (new FlowNodeController)->getFlowNodes($flowId);
                 $invokes = (new InvokeController)->getFlowInvokes($flowId);
                 $decisions = (new DecisionController)->getFlowDecisions($flowId);
-                return view('nodes')->with(compact('flowDetails', 'flowNodes', 'invokes', 'decisions'));
+                $connectors = (new ConnectorController)->getFlowConnectors($flowId);
+                return view('nodes')->with(compact('flowDetails', 'flowNodes', 'invokes', 'decisions', 'connectors'));
             }
         } else {
             return view('welcome');
@@ -76,7 +77,6 @@ class MainController extends Controller
                 $forceEnd = false;
 
                 while ($end == false && $forceEnd == false) {
-
                     $flowNode = $flowNodes->where('id', $currentNodeId)->first();
                     $nodeType = $flowNode->node_type;
                     $nodeSubType = $flowNode->sub_type;
@@ -90,11 +90,12 @@ class MainController extends Controller
                             $invokeDetails = (new InvokeController)->getInvokeDetails($flowDetails->id, $flowNode->id);
                             $invokeInputs = (new InvokeInputController)->getInvokeInputs($invokeDetails->id);
                             $invokeOutputs = (new InvokeOutputController)->getInvokeOutputs($invokeDetails->id);
+
                             if (count($invokeDetails) > 0 && count($invokeInputs) > 0 && count($invokeOutputs) > 0) {
                                 // Invoke
                                 $invokeResults = $this->invoke($request, $invokeDetails, $invokeInputs);
                                 // Log properties
-                                (new PropertyController)->store($invokeResults, $invokeOutputs, $sessionId);
+                                (new PropertyController)->store($invokeResults, $invokeOutputs, $sessionId, $flowDetails->id);
                             } else {
                                 // In this case, one or more invoke entities are not configured correcylt and flow execution is failed
                                 $resCode = "-110";
@@ -109,7 +110,7 @@ class MainController extends Controller
                         $finalResults = collect([]);
                         foreach ($decisionLines as $decisionLine) {
                             // Get property details
-                            $propertyDetails = (new PropertyController)->getPropertyDetails($decisionLine->prop_name, $sessionId);
+                            $propertyDetails = (new PropertyController)->getPropertyDetails($flowDetails->id, $sessionId, $decisionLine->prop_name);
 
                             // Decide and find next node id
                             $decisionResult = $this->decide($propertyDetails, $decisionLine);
@@ -120,7 +121,6 @@ class MainController extends Controller
                             $finalResult->result = $decisionResult;
                             $finalResults->push($finalResult);
                         }
-
                         $successCount = count($finalResults->where('result', true));
                         if ($successCount == 1) {
                             // In this case, only one decision result is true and flow execution can continue
@@ -139,20 +139,17 @@ class MainController extends Controller
                     }
                 }
 
-                // Decide flow response code and append last action result into main response
+                // Append last action result into main response
                 if (isset($invokeResults)) {
                     $invokeResults = json_decode($invokeResults);
                     $flowResponse->LastActionResult = $invokeResults;
                 }
 
-                // Decide flow response code and append last action result into main response
+                // Decide flow response code in case of flow failure
                 if ($resCode == "") {
                     $resCode = "-120";
                     $resDesc = "Unknown flow response, please contact administrator";
                 }
-
-                // Update RSP and calculate duration
-                (new ApiLogController)->update($apiLog, $flowResponse);
             } else {
                 $resCode = "-105";
                 $resDesc = "Flow is disabled, please enable it via GUI";
@@ -180,6 +177,7 @@ class MainController extends Controller
 
     public function invoke($request, $invokeDetails, $invokeInputs)
     {
+        // Build request body
         foreach ($invokeInputs as $invokeInput) {
             $inputType = $invokeInput->input_type;
             $parentObject = $invokeDetails->req_parent_object;
@@ -221,6 +219,7 @@ class MainController extends Controller
 
     public function decide($propertyDetails, $decisionDetails)
     {
+        // Decide current decision based on user configuration and property values
         $successFlag = false;
         if (isset($propertyDetails) && isset($decisionDetails)) {
             $decisionType = $decisionDetails->decision_type;

@@ -22,6 +22,9 @@
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="decisions-tab" data-bs-toggle="tab" data-bs-target="#decisions" type="button" role="tab" aria-controls="decisions" aria-selected="false">Decisions</button>
                     </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="connectors-tab" data-bs-toggle="tab" data-bs-target="#connectors" type="button" role="tab" aria-controls="connectors" aria-selected="false">Connectors</button>
+                    </li>
                 </ul>
                 <div class="tab-content my-tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="nodes" role="tabpanel" aria-labelledby="nodes-tab">
@@ -32,6 +35,9 @@
                     </div>
                     <div class="tab-pane fade" id="decisions" role="tabpanel" aria-labelledby="decisions-tab">
                         @include('includes.decisions')
+                    </div>
+                    <div class="tab-pane fade" id="connectors" role="tabpanel" aria-labelledby="connectors-tab">
+                        @include('includes.connectors')
                     </div>
                 </div>
             </div>

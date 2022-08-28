@@ -15,6 +15,7 @@ class CreatePropertysTable extends Migration
     {
         Schema::create('propertys', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('flow_id');
             $table->integer('session_id');
             $table->text('property_name');
             $table->text('property_value');

@@ -35,7 +35,8 @@ class ConnectorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $connectorId = (new Connector)->store($request);
+        return redirect(url()->previous())->withMessage('Connector record inserted successfully');
     }
 
     /**
@@ -78,14 +79,21 @@ class ConnectorController extends Controller
      * @param  \App\Connector  $connector
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Connector $connector)
+    public function destroy($connectorId)
     {
-        //
+        $user = (new Connector)->where('id', $connectorId)->firstorfail()->delete();
+        return redirect(url()->previous())->withMessage('Connector record deleted successfully');
     }
 
     public function getNextNodeId($flowNodeId, $nodeType)
     {
         $result = (new Connector)->getNextNodeId($flowNodeId, $nodeType);
+        return $result;
+    }
+
+    public function getFlowConnectors($flowId)
+    {
+        $result = (new Connector)->getFlowConnectors($flowId);
         return $result;
     }
 }
