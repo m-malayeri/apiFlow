@@ -20,6 +20,12 @@
                         <button class="nav-link" id="invokes-tab" data-bs-toggle="tab" data-bs-target="#invokes" type="button" role="tab" aria-controls="invokes" aria-selected="false">Invokes</button>
                     </li>
                     <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="invokeInputs-tab" data-bs-toggle="tab" data-bs-target="#invokeInputs" type="button" role="tab" aria-controls="invokeInputs" aria-selected="false">Invoke Inputs</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="invokeOutputs-tab" data-bs-toggle="tab" data-bs-target="#invokeOutputs" type="button" role="tab" aria-controls="invokeOutputs" aria-selected="false">Invoke Outputs</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
                         <button class="nav-link" id="decisions-tab" data-bs-toggle="tab" data-bs-target="#decisions" type="button" role="tab" aria-controls="decisions" aria-selected="false">Decisions</button>
                     </li>
                     <li class="nav-item" role="presentation">
@@ -32,6 +38,12 @@
                     </div>
                     <div class="tab-pane fade" id="invokes" role="tabpanel" aria-labelledby="invokes-tab">
                         @include('includes.invokes')
+                    </div>
+                    <div class="tab-pane fade" id="invokeInputs" role="tabpanel" aria-labelledby="invokeInputs-tab">
+                        @include('includes.invokeInputs')
+                    </div>
+                    <div class="tab-pane fade" id="invokeOutputs" role="tabpanel" aria-labelledby="invokeOutputs-tab">
+                        @include('includes.invokeOutputs')
                     </div>
                     <div class="tab-pane fade" id="decisions" role="tabpanel" aria-labelledby="decisions-tab">
                         @include('includes.decisions')

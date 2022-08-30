@@ -88,4 +88,10 @@ class InvokeOutputController extends Controller
         $result = (new InvokeOutput)->getInvokeOutputs($invokeId);
         return $result;
     }
+
+    public function getFlowInvokeOutputs($flowId)
+    {
+        $result = (new InvokeOutput)->getFlowInvokeOutputs($flowId);
+        return $result;
+    }
 }

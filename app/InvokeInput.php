@@ -13,4 +13,12 @@ class InvokeInput extends Model
             return $result;
         else return null;
     }
+
+    public function getFlowInvokeInputs($flowId)
+    {
+        $result = InvokeInput::where('flow_id', $flowId)->get();
+        if (count($result) > 0)
+            return $result;
+        else return null;
+    }
 }

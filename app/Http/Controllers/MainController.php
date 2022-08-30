@@ -35,7 +35,9 @@ class MainController extends Controller
                 $invokes = (new InvokeController)->getFlowInvokes($flowId);
                 $decisions = (new DecisionController)->getFlowDecisions($flowId);
                 $connectors = (new ConnectorController)->getFlowConnectors($flowId);
-                return view('nodes')->with(compact('flowDetails', 'flowNodes', 'invokes', 'decisions', 'connectors'));
+                $invokeInputs = (new InvokeInputController)->getFlowInvokeInputs($flowId);
+                $invokeOutputs = (new InvokeOutputController)->getFlowInvokeOutputs($flowId);
+                return view('nodes')->with(compact('flowDetails', 'flowNodes', 'invokes', 'decisions', 'connectors', 'invokeInputs', 'invokeOutputs'));
             }
         } else {
             return view('welcome');
@@ -154,24 +156,22 @@ class MainController extends Controller
                 $resCode = "-105";
                 $resDesc = "Flow is disabled, please enable it via GUI";
             }
-        }
+            // Clear sessions and properties based on flow config
+            if ($flowDetails->log_level == "Property") {
+                (new SessionController)->destroy($sessionId);
+            } else if ($flowDetails->log_level == "Session") {
+                (new PropertyController)->destroy($sessionId);
+            } else if ($flowDetails->log_level == "None") {
+                (new SessionController)->destroy($sessionId);
+                (new PropertyController)->destroy($sessionId);
+            }
 
-        // Clear sessions and properties based on flow config
-        if ($flowDetails->log_level == "Property") {
-            (new SessionController)->destroy($sessionId);
-        } else if ($flowDetails->log_level == "Session") {
-            (new PropertyController)->destroy($sessionId);
-        } else if ($flowDetails->log_level == "None") {
-            (new SessionController)->destroy($sessionId);
-            (new PropertyController)->destroy($sessionId);
+            // Update RSP and calculate duration
+            (new ApiLogController)->update($apiLog, $flowResponse);
         }
 
         $flowResponse->ResponseCode = $resCode;
         $flowResponse->ResponseDescription = $resDesc;
-
-        // Update RSP and calculate duration
-        (new ApiLogController)->update($apiLog, $flowResponse);
-
         return response()->json($flowResponse);
     }
 

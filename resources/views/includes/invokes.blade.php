@@ -83,6 +83,37 @@
 				<a href="{{url('invoke/delete/'.$invoke->id)}}"><i class="fa fa-remove"></i></a>
 			</td>
 		</tr>
+		@if(isset($invokeInputs[$invoke->id]))
+		<tr>
+			<td colspan="5">
+				<table class="table mb-0 my-nested-table">
+					<thead>
+						<tr>
+							<th scope="col" rowspan="2"></th>
+							<th scope="col">Input Name</th>
+							<th scope="col">Input Type</th>
+							<th scope="col">Literal Value</th>
+							<th scope="col">API Input Name</th>
+						</tr>
+					</thead>
+					<tbody>
+						@php
+						$invokeInputsArray = $invokeInputs->where('invoke_id', $invoke->id);
+						@endphp
+						@foreach($invokeInputsArray as $invokeInput)
+						<tr>
+							<th scope="row"></th>
+							<td>{{$invokeInput->input_name}}</td>
+							<td>{{$invokeInput->input_type}}</td>
+							<td>{{$invokeInput->literal_value}}</td>
+							<td>{{$invokeInput->api_input_name}}</td>
+						</tr>
+						@endforeach
+					</tbody>
+				</table>
+			</td>
+		</tr>
+		@endif
 		@endforeach
 	</tbody>
 </table>

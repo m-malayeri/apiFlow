@@ -15,6 +15,7 @@ class CreateInvokeOutputsTable extends Migration
     {
         Schema::create('invoke_outputs', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('flow_id');
             $table->integer('invoke_id');
             $table->text('output_name');
             $table->text('save_as_prop_name');

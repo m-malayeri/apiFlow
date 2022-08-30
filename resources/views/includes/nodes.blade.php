@@ -70,6 +70,28 @@
 				<a href="{{url('node/delete/'.$flowNode->id)}}"><i class="fa fa-remove"></i></a>
 			</td>
 		</tr>
+		@if(isset($connectors[$flowNode->id]))
+		<tr>
+			<td colspan="3">
+				<table class="table mb-0 my-nested-table">
+					<thead>
+						<tr>
+							<th scope="col" rowspan="2"></th>
+							<th scope="col">Target Type</th>
+							<th scope="col">Target Node Id</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th scope="row"></th>
+							<th>{{$connectors[$flowNode->id]->target_type}}</th>
+							<th>{{$connectors[$flowNode->id]->target_id}}</th>
+						</tr>
+					</tbody>
+				</table>
+			</td>
+		</tr>
+		@endif
 		@endforeach
 	</tbody>
 </table>
